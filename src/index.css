@@ -1,0 +1,411 @@
+/* ...existing CSS... */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Impact", sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.header h1 {
+  font-size: 3.5rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  font-family: "Impact", sans-serif;
+  color: #000000;
+}
+
+.header .quote {
+  font-family: "Raleway", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  font-style: italic;
+  color: #333333;
+  padding-top: 1rem;
+}
+
+.header .quoteLine {
+  width: 5rem;
+  height: 0.2rem;
+  background: #000000;
+  margin: 0 auto 1rem auto;
+}
+
+.instruction {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 4rem;
+  flex-wrap: nowrap;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 15svw;
+  height: 25svh;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  background-color: #f5f5f7;
+  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.1);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 0.2rem solid transparent; /* Initial transparent border */
+  animation: borderFadeIn 5s linear infinite; /* Apply the new animation */
+}
+
+.card:hover {
+  transform: translateY(-0.5rem);
+  box-shadow: 0 0.6rem 1.6rem rgba(0, 0, 0, 0.15);
+}
+
+.card p {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.imagePlaceholder {
+  width: 8rem;
+  height: 8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #666;
+  border-radius: 0.8rem;
+}
+
+.imagePlaceholder i {
+  font-size: 4rem;
+  color: #007bff;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.filePreview.hidden {
+  display: none;
+}
+
+#autoFields,
+#resCommFields {
+  display: block;
+}
+
+form {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 0.8rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  font-family: Arial, sans-serif;
+  max-width: 35rem;
+  width: 100%;
+  min-height: calc(100vh - 4rem); /* Ajustar a altura mínima do formulário */
+  box-sizing: border-box;
+}
+
+h3 {
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  color: #000000;
+}
+
+.formGroup {
+  text-align: center;
+}
+
+input,
+select,
+button,
+input[type="file"] {
+  width: 100%;
+  font-size: 1rem;
+  box-sizing: border-box;
+  border: 0.1rem solid #ccc;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  text-align: left;
+  margin: 0.5rem 0;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+button {
+  flex: 1;
+  padding: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+button.backButton {
+  background-color: #6c757d;
+  text-align: center;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.filePreview {
+  display: flex;
+  background-color: #f5f5f7;
+  padding: 0.4rem;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+  border: 0.1rem solid #ccc;
+  position: relative;
+}
+
+.filePreview .fileName {
+  font-size: 1rem;
+  padding-left: 2rem;
+}
+
+.filePreview .deleteFile {
+  background: none;
+  color: #ff4d4d;
+  font-size: 3rem;
+  cursor: pointer;
+  padding: 0;
+  position: absolute;
+  transform: translateY(-50%);
+  transition: color 0.2s ease;
+}
+
+.filePreview .deleteFile:hover {
+  color: #ff1a1a;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-family: "Raleway", sans-serif;
+  font-size: 1.2rem;
+  color: #333;
+  opacity: 0.8;
+}
+
+.footer i {
+  color: #007bff;
+  font-size: 2rem;
+  animation: pulse 2s infinite;
+}
+
+.calendar {
+  border: 0.1rem solid #ddd;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+  background-color: white;
+  margin: 1rem auto;
+}
+
+.calendarHeader {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.1rem;
+}
+
+.calendarDay {
+  text-align: center;
+  padding: 0.5rem;
+  border: 0.1rem solid #eee;
+  cursor: pointer;
+}
+
+.calendarDay:hover {
+  background-color: #f0f0f0;
+}
+
+.calendarDropdowns {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+
+.calendarDropdowns select {
+  padding: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.calendarHidden {
+  display: none;
+}
+
+#formTitle {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+#landingPage {
+  display: flex;
+  flex-direction: column;
+  margin-top: 5rem;
+}
+
+.submitButton {
+  text-align: center;
+}
+
+.hamburger-menu {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.hamburger-menu .bar {
+  width: 100%;
+  height: 0.25rem;
+  background-color: #000;
+  transition: all 0.3s ease;
+}
+
+.hamburger-menu i {
+  font-size: 2rem;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.hamburger-menu .fa-bars {
+  opacity: 1;
+}
+
+.hamburger-menu .fa-times {
+  opacity: 0;
+  color: white;
+  transition: opacity 0.3s ease;
+}
+
+.hamburger-menu.active .fa-bars {
+  opacity: 0;
+}
+
+.hamburger-menu.active .fa-times {
+  opacity: 1;
+}
+
+.hamburger-menu i {
+  font-size: 2rem;
+  transition: color 0.3s ease;
+}
+
+.hamburger-menu.active i {
+  color: white;
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.menu ul {
+  list-style: none;
+  text-align: center;
+}
+
+.menu ul li {
+  margin: 1rem 0;
+}
+
+.menu ul li a {
+  color: #fff;
+  font-size: 2rem;
+  text-decoration: none;
+}
+
+.fileUploadContainer {
+  text-align: center;
+}
+
+@keyframes borderFadeIn {
+  0% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #000000; /* Solid black border */
+  }
+  100% {
+    border-color: transparent;
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    width: 30svw;
+    height: 20svh;
+  }
+
+  .imagePlaceholder i {
+    font-size: 3rem;
+    color: #007bff;
+  }
+
+  .cards {
+    gap: 0.5rem;
+  }
+
+  .calendarGrid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    font-size: 0.8rem;
+  }
+}
