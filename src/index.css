@@ -1,10 +1,9 @@
-/* ...existing CSS... */
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 body {
   font-family: "Impact", sans-serif;
   background-color: #ffffff;
@@ -15,6 +14,11 @@ body {
   justify-content: center;
   min-height: 100vh;
   padding: 2rem;
+}
+
+h1,
+h2 {
+  font-weight: normal;
 }
 
 .header {
@@ -211,13 +215,14 @@ button:hover {
 }
 
 .footer {
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direc  tion: column; */
   text-align: center;
   font-family: "Raleway", sans-serif;
   font-size: 1.2rem;
   color: #333;
   opacity: 0.8;
+  margin-top: 2rem;
 }
 
 .footer i {
@@ -375,6 +380,61 @@ button:hover {
 
 .fileUploadContainer {
   text-align: center;
+}
+
+.faq {
+  margin-top: 2rem;
+}
+
+.faq-item {
+  margin-bottom: 1rem;
+}
+
+.faq-question {
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.faq-answer {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+}
+
+.aboutUs {
+  font-family: "Raleway", sans-serif;
+  text-align: center;
+  padding: 1rem;
+}
+
+.aboutUs h1,
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.aboutUs p,
+ul {
+  font-size: 1.2rem;
+  color: #333333;
+  padding: 1rem;
+  list-style-type: none;
+}
+
+.helpContact {
+  font-family: "Raleway", sans-serif;
+  text-align: center;
+  padding: 1rem;
+}
+
+.helpContact h1 {
+  font-size: 1.5rem;
+  font-weight: 650;
+}
+
+.helpContact p {
+  font-size: 1.2rem;
+  color: #333333;
+  padding: 1rem;
 }
 
 @keyframes borderFadeIn {

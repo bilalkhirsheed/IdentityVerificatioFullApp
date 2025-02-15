@@ -1,6 +1,11 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
-const HamburgerMenu: React.FC = () => {
+interface HamburgerMenuProps {
+  setFormType: (type: string | null) => void;
+}
+
+const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ setFormType }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -9,6 +14,11 @@ const HamburgerMenu: React.FC = () => {
 
   const closeMenu = () => {
     setMenuOpen(false);
+  };
+
+  const handleHomeClick = () => {
+    setFormType(null);
+    closeMenu();
   };
 
   return (
@@ -22,24 +32,29 @@ const HamburgerMenu: React.FC = () => {
       <nav className={`menu ${menuOpen ? "" : "hidden"}`} onClick={closeMenu}>
         <ul onClick={(e) => e.stopPropagation()}>
           <li>
-            <a href="#about" onClick={closeMenu}>
+            <Link to="/" onClick={handleHomeClick}>
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link to="/about" onClick={closeMenu}>
               About Us
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#join" onClick={closeMenu}>
+            <Link to="/join" onClick={closeMenu}>
               Join
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#login" onClick={closeMenu}>
+            <Link to="/login" onClick={closeMenu}>
               Login
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#contact" onClick={closeMenu}>
+            <Link to="/contact" onClick={closeMenu}>
               Help &amp; Contact
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
