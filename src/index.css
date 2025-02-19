@@ -495,6 +495,14 @@ button.backButtonBotton {
   cursor: pointer;
 }
 
+.password-container {
+  position: relative;
+}
+
+.password-container input {
+  padding-right: 2.5rem; /* Adjust padding to make space for the icon */
+}
+
 @keyframes borderFadeIn {
   0% {
     border-color: transparent;
