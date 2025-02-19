@@ -89,13 +89,6 @@ const JoinForm: React.FC<JoinFormProps> = ({
             <span
               className="password-toggle-icon"
               onClick={togglePasswordVisibility}
-              style={{
-                position: "absolute",
-                right: "1rem",
-                top: "50%",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-              }}
             >
               <i
                 className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}

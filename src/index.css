@@ -509,6 +509,18 @@ button.backButtonBotton {
   }
 }
 
+.password-container {
+  position: relative;
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .card {
     width: 30svw;
