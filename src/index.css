@@ -6,8 +6,6 @@
 
 body {
   font-family: "Impact", sans-serif;
-  background-color: #ffffff;
-  color: #000000;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,6 +14,23 @@ body {
   padding: 2rem;
   margin: 0;
   font-family: Arial, sans-serif;
+}
+
+body.light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+body.dark {
+  background-color: #1a1a2e; /* Updated to a dark blue-gray */
+  color: #e0e0e0;
+  --primary-color: #90caf9;
+  --card-bg: #2a2a3b; /* Updated to a dark blue-gray */
+  --form-bg: #333344; /* Updated to a dark blue-gray */
+  --file-preview-bg: #333344; /* Updated to a dark blue-gray */
+  --calendar-bg: #333344; /* Updated to a dark blue-gray */
+  --quote-line-color: #c0c0c0; /* Updated to a lighter gray */
+  --back-button-color: #c0c0c0; /* Updated to a lighter gray */
 }
 
 h1,
@@ -33,7 +48,6 @@ h2 {
   font-weight: 400;
   margin-bottom: 1rem;
   font-family: "Impact", sans-serif;
-  color: #000000;
 }
 
 .header .quote {
@@ -41,21 +55,19 @@ h2 {
   font-size: 1.2rem;
   font-weight: 500;
   font-style: italic;
-  color: #333333;
   padding-top: 1rem;
 }
 
 .header .quoteLine {
   width: 5rem;
   height: 0.2rem;
-  background: #000000;
+  background: var(--quote-line-color);
   margin: 0 auto 1rem auto;
 }
 
 .instruction {
   font-family: "Montserrat", sans-serif;
   font-size: 1rem;
-  color: #555;
   margin-bottom: 2rem;
   text-align: center;
 }
@@ -76,13 +88,13 @@ h2 {
   height: 25svh;
   padding: 2rem;
   border-radius: 0.75rem;
-  background-color: #f5f5f7;
+  background-color: var(--card-bg);
   box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.1);
   text-align: center;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 0.2rem solid transparent; /* Initial transparent border */
-  animation: borderFadeIn 5s linear infinite; /* Apply the new animation */
+  border: 0.2rem solid transparent;
+  animation: borderFadeIn 5s linear infinite;
 }
 
 .card:hover {
@@ -102,13 +114,12 @@ h2 {
   align-items: center;
   justify-content: center;
   font-size: 1.4rem;
-  color: #666;
   border-radius: 0.8rem;
 }
 
 .imagePlaceholder i {
   font-size: 4rem;
-  color: #007bff;
+  color: var(--primary-color);
 }
 
 .hidden {
@@ -125,7 +136,7 @@ h2 {
 }
 
 form {
-  background: #fff;
+  background: var(--form-bg);
   padding: 2rem;
   border-radius: 0.8rem;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
@@ -141,7 +152,6 @@ form {
 h3 {
   font-family: Arial, sans-serif;
   font-size: 1rem;
-  color: #000000;
 }
 
 .formGroup {
@@ -187,10 +197,11 @@ button#backButtonTop {
   left: 0;
   margin: 0;
   padding: 0;
+  color: var(--back-button-color);
 }
 
 button#backButtonTop:hover {
-  color: #007bff;
+  color: var(--primary-color);
 }
 
 button:hover {
@@ -199,7 +210,7 @@ button:hover {
 
 .filePreview {
   display: flex;
-  background-color: #f5f5f7;
+  background-color: var(--file-preview-bg);
   padding: 0.4rem;
   border-radius: 0.25rem;
   margin: 1rem 0;
@@ -228,18 +239,15 @@ button:hover {
 }
 
 .footer {
-  /* display: flex;
-    flex-direc  tion: column; */
   text-align: center;
   font-family: "Raleway", sans-serif;
   font-size: 1.2rem;
-  color: #333;
   opacity: 0.8;
   margin-top: 2rem;
 }
 
 .footer i {
-  color: #007bff;
+  color: var(--primary-color);
   font-size: 2rem;
   animation: pulse 2s infinite;
 }
@@ -249,7 +257,7 @@ button:hover {
   border-radius: 0.5rem;
   padding: 1rem;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
-  background-color: white;
+  background-color: var(--calendar-bg);
   margin: 1rem auto;
 }
 
@@ -324,7 +332,7 @@ button:hover {
 .hamburger-menu .bar {
   width: 100%;
   height: 0.25rem;
-  background-color: #000;
+  background-color: var(--primary-color);
   transition: all 0.3s ease;
 }
 
@@ -432,11 +440,11 @@ button:hover {
   border: none;
   cursor: pointer;
   font-size: 2rem;
-  color: #000;
+  color: var(--back-button-color);
 }
 
 #backButtonTop:hover {
-  color: #007bff;
+  color: var(--primary-color);
 }
 
 button.backButtonBotton {
@@ -444,7 +452,7 @@ button.backButtonBotton {
 }
 
 .submitButton {
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -470,9 +478,8 @@ button.backButtonBotton {
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
+  color: #000000;
 }
-
-/* pages */
 
 .aboutUsPage {
   font-family: "Raleway", sans-serif;
@@ -489,7 +496,6 @@ h2 {
 .aboutUsPage p,
 ul {
   font-size: 1.2rem;
-  color: #333333;
   padding: 1rem;
   list-style-type: none;
 }
@@ -507,8 +513,17 @@ ul {
 
 .helpContactPage p {
   font-size: 1.2rem;
-  color: #333333;
   padding: 1rem;
+}
+
+:root {
+  --primary-color: #007bff;
+  --card-bg: #f5f5f7;
+  --form-bg: #ffffff;
+  --file-preview-bg: #f5f5f7;
+  --calendar-bg: #ffffff;
+  --quote-line-color: #000000;
+  --back-button-color: #000000;
 }
 
 @keyframes borderFadeIn {
@@ -516,7 +531,7 @@ ul {
     border-color: transparent;
   }
   50% {
-    border-color: #000000; /* Solid black border */
+    border-color: var(--primary-color);
   }
   100% {
     border-color: transparent;
@@ -531,7 +546,6 @@ ul {
 
   .imagePlaceholder i {
     font-size: 3rem;
-    color: #007bff;
   }
 
   .cards {
@@ -542,4 +556,16 @@ ul {
     grid-template-columns: repeat(7, minmax(0, 1fr));
     font-size: 0.8rem;
   }
+}
+
+.theme-toggle-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 3rem;
+  color: #ffffff;
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
 }

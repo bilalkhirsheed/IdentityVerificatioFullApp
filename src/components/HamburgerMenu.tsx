@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import { ThemeContext } from "../context/ThemeContextDefinition";
 
 const HamburgerMenu: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -51,6 +53,11 @@ const HamburgerMenu: React.FC = () => {
               Help &amp; Contact
             </Link>
           </li>
+          <button onClick={toggleTheme} className="theme-toggle-button">
+            <i
+              className={`fas ${theme === "light" ? "fa-moon" : "fa-sun"}`}
+            ></i>
+          </button>
         </ul>
       </nav>
     </>
