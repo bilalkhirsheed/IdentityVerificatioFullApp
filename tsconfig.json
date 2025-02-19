@@ -10,6 +10,10 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src"],
+  "exclude": [
+    "node_modules",
+    "**/*.d.ts"
+  ],
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
