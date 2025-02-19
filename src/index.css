@@ -227,7 +227,7 @@ button:hover {
 
 .footer {
   /* display: flex;
-  flex-direc  tion: column; */
+    flex-direc  tion: column; */
   text-align: center;
   font-family: "Raleway", sans-serif;
   font-size: 1.2rem;
@@ -493,14 +493,6 @@ button.backButtonBotton {
 
 .fa-eye {
   cursor: pointer;
-}
-
-.password-container {
-  position: relative;
-}
-
-.password-container input {
-  padding-right: 2.5rem; /* Adjust padding to make space for the icon */
 }
 
 @keyframes borderFadeIn {
