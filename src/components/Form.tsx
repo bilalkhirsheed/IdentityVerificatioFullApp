@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useFormLogic } from "../hooks/useFormLogic";
 import Calendar from "./Calendar";
 import BackButton from "./BackButton";
@@ -7,6 +7,8 @@ import BackButton from "./BackButton";
 const Form: React.FC = () => {
   const [searchParams] = useSearchParams();
   const formType = searchParams.get("type");
+  const navigate = useNavigate();
+
   const {
     ownerType,
     filePreviews,
@@ -66,6 +68,10 @@ const Form: React.FC = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
+  };
+
+  const goBack = () => {
+    navigate("/");
   };
 
   return (
@@ -331,7 +337,7 @@ const Form: React.FC = () => {
           <input type="text" id="techId" name="techId" required />
         </div>
         <div className="bottomButtonContainer">
-          <button type="button" id="backButtonBotton">
+          <button type="button" id="backButtonBotton" onClick={goBack}>
             Back
           </button>
           <button type="submit" className="submitButton">
