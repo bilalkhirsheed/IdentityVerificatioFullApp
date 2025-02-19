@@ -7,7 +7,7 @@ import HamburgerMenu from "./components/HamburgerMenu";
 import AboutUs from "./pages/AboutUsPage";
 import Join from "./pages/JoinPage";
 import Login from "./pages/LoginPage";
-import Contact from "./pages/ContactPage";
+import Contact from "./pages/helpContactPage";
 import FormPage from "./pages/FormPage";
 
 const App: React.FC = () => {

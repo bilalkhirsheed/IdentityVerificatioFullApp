@@ -413,43 +413,6 @@ button:hover {
   padding-left: 1rem;
 }
 
-.aboutUs {
-  font-family: "Raleway", sans-serif;
-  text-align: center;
-  padding: 1rem;
-}
-
-.aboutUs h1,
-h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-.aboutUs p,
-ul {
-  font-size: 1.2rem;
-  color: #333333;
-  padding: 1rem;
-  list-style-type: none;
-}
-
-.helpContact {
-  font-family: "Raleway", sans-serif;
-  text-align: center;
-  padding: 1rem;
-}
-
-.helpContact h1 {
-  font-size: 1.5rem;
-  font-weight: 650;
-}
-
-.helpContact p {
-  font-size: 1.2rem;
-  color: #333333;
-  padding: 1rem;
-}
-
 .topButtonContainer {
   display: flex;
   justify-content: flex-start;
@@ -497,18 +460,6 @@ button.backButtonBotton {
   cursor: pointer;
 }
 
-@keyframes borderFadeIn {
-  0% {
-    border-color: transparent;
-  }
-  50% {
-    border-color: #000000; /* Solid black border */
-  }
-  100% {
-    border-color: transparent;
-  }
-}
-
 .password-container {
   position: relative;
 }
@@ -519,6 +470,57 @@ button.backButtonBotton {
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
+}
+
+/* pages */
+
+.aboutUsPage {
+  font-family: "Raleway", sans-serif;
+  text-align: center;
+  padding: 1rem;
+}
+
+.aboutUsPage h1,
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.aboutUsPage p,
+ul {
+  font-size: 1.2rem;
+  color: #333333;
+  padding: 1rem;
+  list-style-type: none;
+}
+
+.helpContactPage {
+  font-family: "Raleway", sans-serif;
+  text-align: center;
+  padding: 1rem;
+}
+
+.helpContactPage h1 {
+  font-size: 1.5rem;
+  font-weight: 650;
+}
+
+.helpContactPage p {
+  font-size: 1.2rem;
+  color: #333333;
+  padding: 1rem;
+}
+
+@keyframes borderFadeIn {
+  0% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #000000; /* Solid black border */
+  }
+  100% {
+    border-color: transparent;
+  }
 }
 
 @media (max-width: 768px) {

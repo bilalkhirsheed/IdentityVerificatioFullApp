@@ -3,7 +3,7 @@ import BackButton from "../components/BackButton";
 
 const AboutUs: React.FC = () => {
   return (
-    <div className="aboutUs">
+    <div className="aboutUsPage">
       <BackButton />
 
       <h1>About Us</h1>

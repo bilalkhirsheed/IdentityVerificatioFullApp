@@ -62,7 +62,7 @@ const Contact: React.FC = () => {
   ];
 
   return (
-    <div className="helpContact">
+    <div className="helpContactPage">
       <BackButton />
 
       <h1>Help & Contact</h1>
