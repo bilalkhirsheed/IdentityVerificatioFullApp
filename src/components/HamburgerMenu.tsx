@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-interface HamburgerMenuProps {
-  setFormType: (type: string | null) => void;
-}
-
-const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ setFormType }) => {
+const HamburgerMenu: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -17,7 +13,6 @@ const HamburgerMenu: React.FC<HamburgerMenuProps> = ({ setFormType }) => {
   };
 
   const handleHomeClick = () => {
-    setFormType(null);
     closeMenu();
   };
 

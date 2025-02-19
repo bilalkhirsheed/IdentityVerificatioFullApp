@@ -1,8 +1,11 @@
 import React from "react";
+import BackButton from "../components/BackButton";
 
 const AboutUs: React.FC = () => {
   return (
     <div className="aboutUs">
+      <BackButton />
+
       <h1>About Us</h1>
       <p>Connecting Customers and Companies</p>
       <p>

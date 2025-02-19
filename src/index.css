@@ -131,8 +131,9 @@ form {
   font-family: Arial, sans-serif;
   max-width: 35rem;
   width: 100%;
-  min-height: calc(100vh - 4rem); /* Ajustar a altura mínima do formulário */
   box-sizing: border-box;
+  text-align: center;
+  height: auto;
 }
 
 h3 {
@@ -161,23 +162,33 @@ input[type="file"] {
 
 .buttonContainer {
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: flex-start;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
 }
 
 button {
   flex: 1;
   padding: 1rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
   border-radius: 0.5rem;
   cursor: pointer;
+  text-align: center;
 }
 
-button.backButton {
-  background-color: #6c757d;
-  text-align: center;
+button#backButtonTop {
+  border: none;
+  cursor: pointer;
+  font-size: 2.2rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+}
+
+button#backButtonTop:hover {
+  color: #007bff;
 }
 
 button:hover {
@@ -435,6 +446,53 @@ ul {
   font-size: 1.2rem;
   color: #333333;
   padding: 1rem;
+}
+
+.topButtonContainer {
+  display: flex;
+  justify-content: flex-start;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.bottomButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+#backButtonTop {
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  color: #000;
+}
+
+#backButtonTop:hover {
+  color: #007bff;
+}
+
+button.backButtonBotton {
+  background-color: #6c757d;
+}
+
+.submitButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.submitButton:hover {
+  opacity: 0.9;
+}
+
+.fa-eye {
+  cursor: pointer;
 }
 
 @keyframes borderFadeIn {

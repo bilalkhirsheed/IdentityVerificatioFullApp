@@ -1,27 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useFormLogic } from "../hooks/useFormLogic";
+import Calendar from "./Calendar";
+import BackButton from "./BackButton";
 
-interface FormProps {
-  formType: string | null;
-  setFormType: (type: string | null) => void;
-}
-
-const Form: React.FC<FormProps> = ({ formType, setFormType }) => {
-  const [ownerType, setOwnerType] = useState<string>("");
-  const [filePreviews, setFilePreviews] = useState<{ [key: string]: string }>(
-    {}
-  );
-  const [calendarVisible, setCalendarVisible] = useState<{
-    [key: string]: boolean;
-  }>({
-    today: false,
-    birth: false,
-  });
-  const [calendarDate, setCalendarDate] = useState<{
-    [key: string]: { month: number; year: number };
-  }>({
-    today: { month: new Date().getMonth(), year: new Date().getFullYear() },
-    birth: { month: new Date().getMonth(), year: new Date().getFullYear() },
-  });
+const Form: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const formType = searchParams.get("type");
+  const {
+    ownerType,
+    filePreviews,
+    calendarVisible,
+    calendarDate,
+    handleOwnerTypeChange,
+    handleFileUpload,
+    clearFileInput,
+    toggleCalendar,
+    selectDate,
+    handleMonthChange,
+    handleYearChange,
+  } = useFormLogic();
 
   useEffect(() => {
     // Logic to show/hide form fields based on formType
@@ -47,121 +45,27 @@ const Form: React.FC<FormProps> = ({ formType, setFormType }) => {
     });
   }, [formType]);
 
-  const goBack = () => {
-    setFormType(null);
-  };
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const dto = Object.fromEntries(formData.entries());
+    console.log(dto);
 
-  const handleOwnerTypeChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setOwnerType(event.target.value);
-  };
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, files } = event.target;
-    if (files && files.length > 0) {
-      setFilePreviews((prev) => ({ ...prev, [id]: files[0].name }));
-    }
-  };
-
-  const clearFileInput = (id: string) => {
-    setFilePreviews((prev) => {
-      const newPreviews = { ...prev };
-      delete newPreviews[id];
-      return newPreviews;
-    });
-    (document.getElementById(id) as HTMLInputElement).value = "";
-  };
-
-  const toggleCalendar = (type: string) => {
-    setCalendarVisible((prev) => ({ ...prev, [type]: !prev[type] }));
-  };
-
-  const selectDate = (type: string, date: string) => {
-    (document.getElementById(`${type}Date`) as HTMLInputElement).value = date;
-    toggleCalendar(type);
-  };
-
-  const handleMonthChange = (
-    type: string,
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const month = parseInt(event.target.value);
-    setCalendarDate((prev) => ({ ...prev, [type]: { ...prev[type], month } }));
-  };
-
-  const handleYearChange = (
-    type: string,
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const year = parseInt(event.target.value);
-    setCalendarDate((prev) => ({ ...prev, [type]: { ...prev[type], year } }));
-  };
-
-  const renderCalendar = (type: string) => {
-    const { month, year } = calendarDate[type];
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    const days = [];
-    for (let i = 1; i <= daysInMonth; i++) {
-      days.push(
-        <div
-          key={i}
-          className="calendarDay"
-          onClick={() => selectDate(type, `${month + 1}/${i}/${year}`)}
-        >
-          {i}
-        </div>
-      );
-    }
-
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
-    const years = [];
-    for (
-      let i = new Date().getFullYear();
-      i >= new Date().getFullYear() - 100;
-      i--
-    ) {
-      years.push(i);
-    }
-
-    return (
-      <div
-        className={`calendar ${calendarVisible[type] ? "" : "calendarHidden"}`}
-      >
-        <div className="calendarHeader">
-          <select value={month} onChange={(e) => handleMonthChange(type, e)}>
-            {months.map((m, index) => (
-              <option key={index} value={index}>
-                {m}
-              </option>
-            ))}
-          </select>
-          <select value={year} onChange={(e) => handleYearChange(type, e)}>
-            {years.map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="calendarGrid">{days}</div>
-      </div>
-    );
+    // Prepare DTO for sending to the endpoint
+    fetch("/api/form", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dto),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   return (
@@ -171,13 +75,10 @@ const Form: React.FC<FormProps> = ({ formType, setFormType }) => {
       action="send_email.php"
       encType="multipart/form-data"
       className={formType ? "" : "hidden"}
+      onSubmit={handleSubmit}
     >
       <div>
-        <div className="buttonContainer">
-          <button type="button" className="backButton" onClick={goBack}>
-            Back
-          </button>
-        </div>
+        <BackButton />
         <h2 id="formTitle">
           {formType && formType.charAt(0).toUpperCase() + formType.slice(1)}
         </h2>
@@ -221,7 +122,14 @@ const Form: React.FC<FormProps> = ({ formType, setFormType }) => {
             readOnly
             onClick={() => toggleCalendar("today")}
           />
-          {renderCalendar("today")}
+          <Calendar
+            type="today"
+            visible={calendarVisible["today"]}
+            date={calendarDate["today"]}
+            selectDate={selectDate}
+            handleMonthChange={handleMonthChange}
+            handleYearChange={handleYearChange}
+          />
         </div>
         <div className="formGroup common">
           <label htmlFor="birthDate">Birth Date</label>
@@ -233,7 +141,14 @@ const Form: React.FC<FormProps> = ({ formType, setFormType }) => {
             readOnly
             onClick={() => toggleCalendar("birth")}
           />
-          {renderCalendar("birth")}
+          <Calendar
+            type="birth"
+            visible={calendarVisible["birth"]}
+            date={calendarDate["birth"]}
+            selectDate={selectDate}
+            handleMonthChange={handleMonthChange}
+            handleYearChange={handleYearChange}
+          />
         </div>
         <div className="formGroup common">
           <label htmlFor="ownerType">Ownership</label>
@@ -415,8 +330,8 @@ const Form: React.FC<FormProps> = ({ formType, setFormType }) => {
           </label>
           <input type="text" id="techId" name="techId" required />
         </div>
-        <div className="buttonContainer">
-          <button type="button" className="backButton" onClick={goBack}>
+        <div className="bottomButtonContainer">
+          <button type="button" id="backButtonBotton">
             Back
           </button>
           <button type="submit" className="submitButton">

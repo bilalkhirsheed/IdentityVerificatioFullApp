@@ -1,19 +1,25 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface CardProps {
   type: string;
   icon: string;
-  onClick: () => void;
+  formType: string;
 }
 
-const Card: React.FC<CardProps> = ({ type, icon, onClick }) => {
+const Card: React.FC<CardProps> = ({ type, icon, formType }) => {
   return (
-    <div className="card" onClick={onClick}>
-      <div className="imagePlaceholder">
-        <i className={`fas fa-${icon}`}></i>
+    <Link
+      to={`/form?type=${formType}`}
+      style={{ textDecoration: "none", color: "inherit" }}
+    >
+      <div className="card">
+        <div className="imagePlaceholder">
+          <i className={`fas fa-${icon}`}></i>
+        </div>
+        <h3>{type}</h3>
       </div>
-      <h3>{type}</h3>
-    </div>
+    </Link>
   );
 };
 

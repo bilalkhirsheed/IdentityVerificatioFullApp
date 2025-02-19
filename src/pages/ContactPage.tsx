@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import BackButton from "../components/BackButton";
 
 const Contact: React.FC = () => {
   const [openQuestion, setOpenQuestion] = useState<number | null>(null);
@@ -62,6 +63,8 @@ const Contact: React.FC = () => {
 
   return (
     <div className="helpContact">
+      <BackButton />
+
       <h1>Help & Contact</h1>
       <h2>Frequently Asked Questions:</h2>
       <div className="faq">
