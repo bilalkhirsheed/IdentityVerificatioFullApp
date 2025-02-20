@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export const useFormLogic = () => {
+const useFormLogic = () => {
   const [ownerType, setOwnerType] = useState<string>("");
   const [filePreviews, setFilePreviews] = useState<{ [key: string]: string }>(
     {}
@@ -17,7 +17,6 @@ export const useFormLogic = () => {
     today: { month: new Date().getMonth(), year: new Date().getFullYear() },
     birth: { month: new Date().getMonth(), year: new Date().getFullYear() },
   });
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,20 +37,6 @@ export const useFormLogic = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
-  useEffect(() => {
-    const loadGoogleMapsScript = () => {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places`;
-      script.async = true;
-      script.onload = () => setIsScriptLoaded(true);
-      document.body.appendChild(script);
-    };
-
-    if (!isScriptLoaded) {
-      loadGoogleMapsScript();
-    }
-  }, [isScriptLoaded]);
 
   const handleOwnerTypeChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -174,21 +159,6 @@ export const useFormLogic = () => {
     );
   };
 
-  const initializeAutocomplete = (inputId: string) => {
-    if (isScriptLoaded) {
-      const input = document.getElementById(inputId) as HTMLInputElement;
-      if (input) {
-        const autocomplete = new window.google.maps.places.Autocomplete(input);
-        autocomplete.addListener("place_changed", () => {
-          const place = autocomplete.getPlace();
-          if (place && place.formatted_address) {
-            input.value = place.formatted_address;
-          }
-        });
-      }
-    }
-  };
-
   return {
     ownerType,
     filePreviews,
@@ -202,6 +172,7 @@ export const useFormLogic = () => {
     handleMonthChange,
     handleYearChange,
     renderCalendar,
-    initializeAutocomplete,
   };
 };
+
+export { useFormLogic };

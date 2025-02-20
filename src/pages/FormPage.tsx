@@ -21,7 +21,6 @@ const FormPage: React.FC = () => {
     selectDate,
     handleMonthChange,
     handleYearChange,
-    initializeAutocomplete,
   } = useFormLogic();
 
   useEffect(() => {
@@ -55,15 +54,13 @@ const FormPage: React.FC = () => {
         group.classList.remove("hidden");
       });
     }
-
-    initializeAutocomplete("address");
-    initializeAutocomplete("ownerAddress");
-  }, [formType, ownerType, initializeAutocomplete]); // Adicione ownerType como dependência
+  }, [formType, ownerType]); // Adicione ownerType como dependência
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const dto = Object.fromEntries(formData.entries());
+    dto.todayDate = new Date().toLocaleDateString();
     console.log(dto);
 
     // Prepare DTO for sending to the endpoint
@@ -108,12 +105,13 @@ const FormPage: React.FC = () => {
         <div className="formGroup common">
           <label htmlFor="address">Address</label>
           <input type="text" id="address" name="address" required />
-          <label htmlFor="addressComplement">Complement</label>
+          <label htmlFor="adressNumber">Number</label>
           <input
-            type="text"
-            id="addressComplement"
-            name="addressComplement"
-            placeholder="Optional"
+            type="number"
+            id="adressNumber"
+            name="adressNumber"
+            pattern="[0-9]*"
+            inputMode="numeric"
           />
         </div>
         <div className="formGroup common">
@@ -130,25 +128,6 @@ const FormPage: React.FC = () => {
         <div className="formGroup common">
           <label htmlFor="email">Email</label>
           <input type="email" id="email" name="email" />
-        </div>
-        <div className="formGroup common">
-          <label htmlFor="todayDate">Today's Date</label>
-          <input
-            type="text"
-            id="todayDate"
-            name="todayDate"
-            placeholder="mm/dd/yyyy"
-            readOnly
-            onClick={() => toggleCalendar("today")}
-          />
-          <Calendar
-            type="today"
-            visible={calendarVisible["today"]}
-            date={calendarDate["today"]}
-            selectDate={selectDate}
-            handleMonthChange={handleMonthChange}
-            handleYearChange={handleYearChange}
-          />
         </div>
         <div className="formGroup common">
           <label htmlFor="birthDate">Birth Date</label>
@@ -187,25 +166,31 @@ const FormPage: React.FC = () => {
               <label htmlFor="ownerFullName">Owner's Name</label>
               <input type="text" id="ownerFullName" name="ownerFullName" />
             </div>
-            <div className="formGroup">
+            {/* <div className="formGroup">
               <label htmlFor="ownerAddress">Owner's Address</label>
               <input type="text" id="ownerAddress" name="ownerAddress" />
-              <label htmlFor="ownerAddressComplement">Complement</label>
+              <label htmlFor="owneradressNumber">Number</label>
               <input
-                type="text"
-                id="ownerAddressComplement"
-                name="ownerAddressComplement"
-                placeholder="Optional"
+                type="number"
+                id="owneradressNumber"
+                name="owneradressNumber"
               />
-            </div>
+            </div> */}
             <div className="formGroup">
               <label htmlFor="ownerPhone">Owner's Phone</label>
-              <input type="tel" id="ownerPhone" name="ownerPhone" />
+              <input
+                type="tel"
+                id="ownerPhone"
+                name="ownerPhone"
+                pattern="[0-9]*"
+                inputMode="numeric"
+                placeholder="+000 000-000..."
+              />
             </div>
-            <div className="formGroup">
+            {/* <div className="formGroup">
               <label htmlFor="ownerEmail">Owner's Email</label>
               <input type="email" id="ownerEmail" name="ownerEmail" />
-            </div>
+            </div> */}
           </div>
         )}
         {formType === "auto" && (
