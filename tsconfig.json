@@ -14,7 +14,8 @@
   },
   "include": [
     "src",
-    "src/global.d.ts"
+    "src/types/global.d.ts",
+    "src/types/css.d.ts"
   ],
   "exclude": [
     "node_modules",
