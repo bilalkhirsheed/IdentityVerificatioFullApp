@@ -1,7 +1,7 @@
 import React from "react";
-import Card from "./Card";
+import Card from "../components/Card";
 
-const Cards: React.FC = () => {
+const CardsPage: React.FC = () => {
   return (
     <div className="cards">
       <Card type="Residential" icon="home" formType="residential" />
@@ -11,4 +11,4 @@ const Cards: React.FC = () => {
   );
 };
 
-export default Cards;
+export default CardsPage;

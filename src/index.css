@@ -22,17 +22,16 @@ body.light {
 }
 
 body.dark {
-  background-color: #1a1a2e; /* Updated to a dark blue-gray */
+  background-color: #1a1a2e;
   color: #e0e0e0;
   --primary-color: #90caf9;
-  --card-bg: #2a2a3b; /* Updated to a dark blue-gray */
-  --form-bg: #333344; /* Updated to a dark blue-gray */
-  --file-preview-bg: #333344; /* Updated to a dark blue-gray */
-  --calendar-bg: #333344; /* Updated to a dark blue-gray */
-  --quote-line-color: #c0c0c0; /* Updated to a lighter gray */
-  --back-button-color: #c0c0c0; /* Updated to a lighter gray */
+  --card-bg: #2a2a3b;
+  --form-bg: #333344;
+  --file-preview-bg: #333344;
+  --calendar-bg: #333344;
+  --quote-line-color: #c0c0c0;
+  --back-button-color: #c0c0c0;
 }
-
 h1,
 h2 {
   font-weight: normal;
