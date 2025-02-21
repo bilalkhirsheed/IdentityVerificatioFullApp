@@ -99,17 +99,19 @@ const FormPage: React.FC = () => {
           {formType && formType.charAt(0).toUpperCase() + formType.slice(1)}
         </h2>
         <div className="formGroup common">
-          <label htmlFor="firstName">First Name</label>
-          <input type="text" id="firstName" name="firstName" required />
+          <label htmlFor="fullName">Name:</label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            placeholder="Name (Last, Fist, Middle Initial)"
+            required
+          />
         </div>
         <div className="formGroup common">
-          <label htmlFor="lastName">Last Name</label>
-          <input type="text" id="lastName" name="lastName" required />
-        </div>
-        <div className="formGroup common">
-          <label htmlFor="address">Address</label>
+          <label htmlFor="address">Address:</label>
           <input type="text" id="address" name="address" required />
-          <label htmlFor="adressNumber">Adress Number</label>
+          <label htmlFor="adressNumber">Number:</label>
           <input
             type="number"
             id="adressNumber"
@@ -119,7 +121,7 @@ const FormPage: React.FC = () => {
           />
         </div>
         <div className="formGroup common">
-          <label htmlFor="phoneNumber">Phone Number</label>
+          <label htmlFor="phoneNumber">Phone Number:</label>
           <input
             type="tel"
             id="phoneNumber"
@@ -130,11 +132,11 @@ const FormPage: React.FC = () => {
           />
         </div>
         <div className="formGroup common">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Email:</label>
           <input type="email" id="email" name="email" />
         </div>
         <div className="formGroup common">
-          <label htmlFor="birthDate">Birth Date</label>
+          <label htmlFor="birthDate">Birth Date:</label>
           <input
             type="text"
             id="birthDate"
@@ -153,7 +155,7 @@ const FormPage: React.FC = () => {
           />
         </div>
         <div className="formGroup common">
-          <label htmlFor="ownerType">Ownership</label>
+          <label htmlFor="ownerType">Ownership:</label>
           <select
             id="ownerType"
             name="ownerType"
@@ -167,7 +169,7 @@ const FormPage: React.FC = () => {
         {ownerType === "other" && (
           <div id="ownerFields">
             <div className="formGroup">
-              <label htmlFor="ownerFullName">Owner's Name</label>
+              <label htmlFor="ownerFullName">Owner's Name:</label>
               <input type="text" id="ownerFullName" name="ownerFullName" />
             </div>
             {/* <div className="formGroup">
@@ -181,7 +183,7 @@ const FormPage: React.FC = () => {
               />
             </div> */}
             <div className="formGroup">
-              <label htmlFor="ownerPhone">Owner's Phone</label>
+              <label htmlFor="ownerPhone">Owner's Phone:</label>
               <input
                 type="tel"
                 id="ownerPhone"
@@ -201,7 +203,7 @@ const FormPage: React.FC = () => {
           <div id="autoFields">
             <div className="formGroup">
               <label htmlFor="aaaId">
-                AAA <br />
+                AAA: <br />
                 <small>
                   (If you do not have an AAA membership please leave this field
                   blank)
@@ -210,11 +212,11 @@ const FormPage: React.FC = () => {
               <input type="text" id="aaaId" name="aaaId" />
             </div>
             <div className="formGroup">
-              <label htmlFor="insurancePolicy">Insurance Policy Number</label>
+              <label htmlFor="insurancePolicy">Insurance Policy Number:</label>
               <input type="text" id="insurancePolicy" name="insurancePolicy" />
             </div>
             <div className="formGroup">
-              <label htmlFor="vin">VIN</label>
+              <label htmlFor="vin">VIN:</label>
               <input
                 type="text"
                 id="vin"
@@ -224,7 +226,7 @@ const FormPage: React.FC = () => {
             </div>
             <div className="fileUploadContainer">
               <label htmlFor="registration" className="centered-label">
-                Registration (file upload)
+                Registration (file upload):
               </label>
               <input
                 type="file"
@@ -250,7 +252,7 @@ const FormPage: React.FC = () => {
             </div>
             <div className="fileUploadContainer">
               <label htmlFor="licensePlate" className="centered-label">
-                License Plate Photo (file upload)
+                License Plate Photo (file upload):
               </label>
               <input
                 type="file"
@@ -279,7 +281,7 @@ const FormPage: React.FC = () => {
         {(formType === "residential" || formType === "commercial") && (
           <div id="resCommFields">
             <div className="formGroup">
-              <label htmlFor="propertyType">Property Type</label>
+              <label htmlFor="propertyType">Property Type:</label>
               <select id="propertyType" name="propertyType">
                 <option value="">Select...</option>
                 <option value="singleFamily">Single-family</option>
@@ -292,7 +294,7 @@ const FormPage: React.FC = () => {
             </div>
             <div className="fileUploadContainer">
               <label htmlFor="proofOfResidency" className="centered-label">
-                Proof of Residency
+                Proof of Residency:
               </label>
               <br />
               <small>(e.g., mail or bill matching info)</small>
@@ -322,7 +324,7 @@ const FormPage: React.FC = () => {
         )}
         <div className="formGroup common">
           <div className="fileUploadContainer">
-            <label htmlFor="id">ID or DL (file upload)</label>
+            <label htmlFor="id">ID or DL (file upload):</label>
             <input
               type="file"
               id="id"
@@ -346,7 +348,7 @@ const FormPage: React.FC = () => {
         </div>
         <div className="formGroup common">
           <label htmlFor="techId">
-            Reference code <br />
+            Reference code: <br />
             <small>(consult for details if not provided)</small>
           </label>
           <input type="text" id="techId" name="techId" required />

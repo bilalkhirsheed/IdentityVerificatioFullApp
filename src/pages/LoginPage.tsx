@@ -4,6 +4,11 @@ import BackButton from "../components/BackButton";
 const Login: React.FC = () => {
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,13 +44,21 @@ const Login: React.FC = () => {
           onChange={(e) => setIdentifier(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div className="password-container">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <span
+            className="password-toggle-icon"
+            onClick={togglePasswordVisibility}
+          >
+            <i className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
+          </span>
+        </div>
         <button type="submit" className="submitButton">
           Login
         </button>

@@ -40,7 +40,13 @@ const JoinPage: React.FC = () => {
 
         <div className="form-group">
           <label htmlFor="name">Name:</label>
-          <input type="text" id="name" name="name" required placeholder="Name (Last, Fist, Middle Initial)"/>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            placeholder="Name (Last, Fist, Middle Initial)"
+          />
         </div>
         <div className="form-group">
           <label htmlFor="email">Email:</label>

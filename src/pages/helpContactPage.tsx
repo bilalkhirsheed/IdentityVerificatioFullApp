@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import BackButton from "../components/BackButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronRight,
+  faChevronDown,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Contact: React.FC = () => {
   const [openQuestions, setOpenQuestions] = useState<number[]>([0]); // Set initial state to [0]
@@ -110,11 +115,16 @@ const Contact: React.FC = () => {
       <BackButton />
       <h1>Help & Contact</h1>
       <h2>Frequently Asked Questions:</h2>
-      <p>(Click on the questions to reveal the answers)</p>{" "}
       <div className="faq">
         {faqs.map((faq, index) => (
           <div key={index} className="faq-item">
             <h2 className="faq-question" onClick={() => toggleQuestion(index)}>
+              <FontAwesomeIcon
+                icon={
+                  openQuestions.includes(index) ? faChevronDown : faChevronRight
+                }
+                style={{ marginRight: "0.5rem", fontSize: "1rem" }}
+              />
               {faq.question}
             </h2>
             {openQuestions.includes(index) && (

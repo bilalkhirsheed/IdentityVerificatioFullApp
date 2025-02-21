@@ -412,6 +412,9 @@ button:hover {
 }
 
 .faq-question {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
   font-weight: normal;
   cursor: pointer;
 }
