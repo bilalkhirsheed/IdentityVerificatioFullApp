@@ -52,9 +52,10 @@ h2 {
 .header .quote {
   font-family: "Raleway", sans-serif;
   font-size: 1.2rem;
+  padding-top: 1rem;
   font-weight: 500;
   font-style: italic;
-  padding-top: 1rem;
+  color: #333333;
 }
 
 .header .quoteLine {

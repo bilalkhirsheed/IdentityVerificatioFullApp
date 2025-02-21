@@ -108,9 +108,9 @@ const Contact: React.FC = () => {
   return (
     <div className="helpContactPage">
       <BackButton />
-
       <h1>Help & Contact</h1>
       <h2>Frequently Asked Questions:</h2>
+      <p>(Click on the questions to reveal the answers)</p>{" "}
       <div className="faq">
         {faqs.map((faq, index) => (
           <div key={index} className="faq-item">

@@ -99,13 +99,17 @@ const FormPage: React.FC = () => {
           {formType && formType.charAt(0).toUpperCase() + formType.slice(1)}
         </h2>
         <div className="formGroup common">
-          <label htmlFor="fullName">Full Name</label>
-          <input type="text" id="fullName" name="fullName" required />
+          <label htmlFor="firstName">First Name</label>
+          <input type="text" id="firstName" name="firstName" required />
+        </div>
+        <div className="formGroup common">
+          <label htmlFor="lastName">Last Name</label>
+          <input type="text" id="lastName" name="lastName" required />
         </div>
         <div className="formGroup common">
           <label htmlFor="address">Address</label>
           <input type="text" id="address" name="address" required />
-          <label htmlFor="adressNumber">Number</label>
+          <label htmlFor="adressNumber">Adress Number</label>
           <input
             type="number"
             id="adressNumber"
@@ -120,7 +124,7 @@ const FormPage: React.FC = () => {
             type="tel"
             id="phoneNumber"
             name="phoneNumber"
-            placeholder="+000 000-000..."
+            placeholder="(000) 000-0000"
             pattern="[0-9]*"
             inputMode="numeric"
           />
@@ -184,7 +188,7 @@ const FormPage: React.FC = () => {
                 name="ownerPhone"
                 pattern="[0-9]*"
                 inputMode="numeric"
-                placeholder="+000 000-000..."
+                placeholder="(000) 000-0000"
               />
             </div>
             {/* <div className="formGroup">
@@ -211,7 +215,12 @@ const FormPage: React.FC = () => {
             </div>
             <div className="formGroup">
               <label htmlFor="vin">VIN</label>
-              <input type="text" id="vin" name="vin" />
+              <input
+                type="text"
+                id="vin"
+                name="vin"
+                placeholder="(00000000000000000)"
+              />
             </div>
             <div className="fileUploadContainer">
               <label htmlFor="registration" className="centered-label">

@@ -52,7 +52,7 @@ const JoinPage: React.FC = () => {
             type="tel"
             id="phoneNumber"
             name="phoneNumber"
-            placeholder="+000 000-000..."
+            placeholder="(000) 000-0000"
             pattern="[0-9]*"
             inputMode="numeric"
             required
