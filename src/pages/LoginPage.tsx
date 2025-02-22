@@ -3,16 +3,10 @@ import BackButton from "../components/BackButton";
 
 const Login: React.FC = () => {
   const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const dto = { identifier, password };
+    const dto = { identifier };
     console.log("Logging in with", dto);
 
     // Implement login logic here
@@ -36,7 +30,7 @@ const Login: React.FC = () => {
     <div className="page">
       <BackButton />
       <form onSubmit={handleLogin}>
-        <h1>Login</h1>
+        <h1 className="common-header">Login</h1>
         <input
           type="text"
           placeholder="Email or Phone Number"
@@ -44,21 +38,6 @@ const Login: React.FC = () => {
           onChange={(e) => setIdentifier(e.target.value)}
           required
         />
-        <div className="password-container">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <span
-            className="password-toggle-icon"
-            onClick={togglePasswordVisibility}
-          >
-            <i className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
-          </span>
-        </div>
         <button type="submit" className="submitButton">
           Login
         </button>

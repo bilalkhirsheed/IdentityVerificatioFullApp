@@ -1,13 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import BackButton from "../components/BackButton";
 
 const JoinPage: React.FC = () => {
-  const [showPassword, setShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -36,7 +30,9 @@ const JoinPage: React.FC = () => {
       <BackButton />
 
       <form onSubmit={handleSubmit}>
-        <h1 id="formTitle">Join</h1>
+        <h1 id="formTitle" className="common-header">
+          Join
+        </h1>
 
         <div className="form-group">
           <label htmlFor="name">Name:</label>
@@ -78,25 +74,6 @@ const JoinPage: React.FC = () => {
             name="businessIndustry"
             required
           />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          <div className="password-container">
-            <input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              name="password"
-              required
-            />
-            <span
-              className="password-toggle-icon"
-              onClick={togglePasswordVisibility}
-            >
-              <i
-                className={`fa ${showPassword ? "fa-eye-slash" : "fa-eye"}`}
-              ></i>
-            </span>
-          </div>
         </div>
         <button type="submit" className="submitButton">
           Join

@@ -572,3 +572,10 @@ ul {
   left: 50%;
   transform: translateX(-50%);
 }
+
+.common-header {
+  font-size: 2rem; /* Ajuste o tamanho conforme necessário */
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1rem;
+}

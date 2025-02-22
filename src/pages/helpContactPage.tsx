@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const Contact: React.FC = () => {
-  const [openQuestions, setOpenQuestions] = useState<number[]>([0]); // Set initial state to [0]
+  const [openQuestions, setOpenQuestions] = useState<number[]>([]); // Set initial state to []
 
   const toggleQuestion = (index: number) => {
     setOpenQuestions((prev) =>
