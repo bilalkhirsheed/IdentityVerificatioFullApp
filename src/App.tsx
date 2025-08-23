@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { HashRouter as Router, Routes, Route } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import Header from "./components/Header"
 import HamburgerMenu from "./components/HamburgerMenu"
