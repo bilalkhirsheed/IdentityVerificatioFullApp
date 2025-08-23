@@ -1,46 +1,59 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import HamburgerMenu from "./components/HamburgerMenu";
-import AboutUs from "./pages/AboutUsPage";
-import Join from "./pages/JoinPage";
-import Login from "./pages/LoginPage";
-import Contact from "./pages/helpContactPage";
-import FormPage from "./pages/FormPage";
-import CardsPage from "./pages/CardsPage";
-import { ThemeProvider } from "./context/ThemeContext";
+"use client"
+
+import type React from "react"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { motion, AnimatePresence } from "framer-motion"
+import Header from "./components/Header"
+import HamburgerMenu from "./components/HamburgerMenu"
+import CardsPage from "./pages/CardsPage"
+import FormPage from "./pages/FormPage"
+import AboutUsPage from "./pages/AboutUsPage"
+import LoginPage from "./pages/LoginPage"
+import JoinPage from "./pages/JoinPage"
+import HelpContactPage from "./pages/helpContactPage"
+import "./pages/AboutUsPage.css"
 
 const App: React.FC = () => {
-  const [theme, setTheme] = useState("light");
-
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
-  };
-
-  useEffect(() => {
-    document.body.className = theme;
-  }, [theme]);
-
   return (
-    <ThemeProvider value={{ theme, toggleTheme }}>
-      <Router>
-        <div>
-          <HamburgerMenu />
-          <Header />
-          <Routes>
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/join" element={<Join />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/" element={<CardsPage />} />
-            <Route path="/form" element={<FormPage />} />
-          </Routes>
-          <Footer />
-        </div>
-      </Router>
-    </ThemeProvider>
-  );
-};
+    <Router>
+      <div className="page-container">
+        <HamburgerMenu />
 
-export default App;
+        <AnimatePresence mode="wait">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <motion.div
+                  key="home"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Header />
+                  <motion.div
+                    className="instruction"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8, duration: 0.6 }}
+                  >
+                    <p>Choose your verification type to get started</p>
+                  </motion.div>
+                  <CardsPage />
+                </motion.div>
+              }
+            />
+            <Route path="/form" element={<FormPage />} />
+            <Route path="/about" element={<AboutUsPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/join" element={<JoinPage />} />
+            <Route path="/help" element={<HelpContactPage />} />
+          </Routes>
+        </AnimatePresence>
+      </div>
+    </Router>
+  )
+}
+
+export default App

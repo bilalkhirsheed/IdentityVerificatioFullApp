@@ -1,0 +1,365 @@
+/* Google Places Autocomplete Styles */
+.address-autocomplete {
+  position: relative;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-light);
+  z-index: 1;
+  font-size: 1.1rem;
+}
+
+.loading-spinner {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.loading-spinner .loading {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+.google-places-suggestions {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 2px solid var(--primary-purple-light);
+  border-radius: 0.75rem;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: var(--shadow-xl);
+  animation: fadeInUp 0.2s ease;
+}
+
+.google-places-suggestion {
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.google-places-suggestion:hover {
+  background: var(--accent-purple);
+  color: var(--primary-purple-dark);
+  transform: translateX(4px);
+}
+
+.google-places-suggestion:first-child {
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.google-places-suggestion:last-child {
+  border-bottom: none;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.suggestion-icon {
+  color: var(--primary-purple);
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.suggestion-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.suggestion-main {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.suggestion-secondary {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+
+/* Enhanced Calendar Styles */
+.enhanced-calendar {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 2px solid var(--border-light);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-xl);
+  z-index: 100;
+  padding: 1.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-nav {
+  background: var(--accent-purple);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--primary-purple);
+}
+
+.calendar-nav:hover {
+  background: var(--primary-purple);
+  color: white;
+}
+
+.calendar-title {
+  text-align: center;
+}
+
+.calendar-title h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.current-date {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.todays-birthdays,
+.upcoming-birthdays {
+  background: var(--accent-purple);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.todays-birthdays h4,
+.upcoming-birthdays h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--primary-purple-dark);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.birthday-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.birthday-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.birthday-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.birthday-date {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.25rem;
+  margin-top: 1rem;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 0.5rem;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-weight: 500;
+  position: relative;
+  padding: 0.25rem;
+  min-height: 45px;
+}
+
+.calendar-day:hover {
+  background: var(--accent-purple);
+  transform: scale(1.05);
+}
+
+.calendar-day.selected {
+  background: var(--primary-purple);
+  color: white;
+}
+
+.calendar-day.today {
+  background: linear-gradient(135deg, var(--primary-purple), var(--primary-purple-light));
+  color: white;
+  font-weight: 700;
+  box-shadow: var(--shadow-md);
+}
+
+.calendar-day.other-month {
+  color: var(--text-light);
+  opacity: 0.5;
+}
+
+.day-number {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.today-indicator {
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 1px;
+}
+
+.birthday-indicators {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.birthday-indicators .birthday-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid white;
+}
+
+.birthday-more {
+  font-size: 0.6rem;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+/* Enhanced focus state for address input */
+.address-autocomplete input:focus {
+  border-color: var(--primary-purple);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+  border-radius: 0.75rem;
+}
+
+.address-autocomplete input:focus + .input-wrapper + .google-places-suggestions,
+.address-autocomplete .google-places-suggestions {
+  border-color: var(--primary-purple);
+}
+
+/* Smooth animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .enhanced-calendar {
+    max-width: 350px;
+    padding: 1rem;
+  }
+
+  .calendar-day {
+    min-height: 40px;
+    font-size: 0.85rem;
+  }
+
+  .calendar-title h3 {
+    font-size: 1.1rem;
+  }
+
+  .current-date {
+    font-size: 0.8rem;
+  }
+
+  .todays-birthdays,
+  .upcoming-birthdays {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .enhanced-calendar {
+    max-width: 320px;
+    padding: 0.75rem;
+  }
+
+  .calendar-day {
+    min-height: 35px;
+    font-size: 0.8rem;
+  }
+
+  .calendar-nav {
+    width: 35px;
+    height: 35px;
+  }
+
+  .birthday-list {
+    gap: 0.25rem;
+  }
+
+  .birthday-item {
+    font-size: 0.85rem;
+  }
+}
