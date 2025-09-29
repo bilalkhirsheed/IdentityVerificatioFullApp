@@ -13,14 +13,19 @@ const useFormLogic = () => {
   });
   const [calendarDate, setCalendarDate] = useState<{
     [key: string]: { month: number; year: number };
-  }>({
-    today: { month: new Date().getMonth(), year: new Date().getFullYear() },
-    birth: { month: new Date().getMonth(), year: new Date().getFullYear() },
+  }>(() => {
+    const currentYear = new Date().getFullYear()
+    const currentMonth = new Date().getMonth()
+    console.log('Initializing calendar dates with year:', currentYear, 'month:', currentMonth)
+    return {
+      today: { month: currentMonth, year: currentYear },
+      birth: { month: currentMonth, year: currentYear },
+    }
   });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const calendarElements = document.querySelectorAll(".calendar");
+      const calendarElements = document.querySelectorAll(".enhanced-calendar, .modern-calendar, .calendar-container");
       let isClickInside = false;
       calendarElements.forEach((calendar) => {
         if (calendar.contains(event.target as Node)) {
@@ -85,11 +90,16 @@ const useFormLogic = () => {
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const year = parseInt(event.target.value);
+    console.log('handleYearChange - type:', type, 'new year:', year, 'event target value:', event.target.value);
     setCalendarDate(
-      (prev: { [key: string]: { month: number; year: number } }) => ({
-        ...prev,
-        [type]: { ...prev[type], year },
-      })
+      (prev: { [key: string]: { month: number; year: number } }) => {
+        const newState = {
+          ...prev,
+          [type]: { ...prev[type], year },
+        };
+        console.log('Updated calendar date state:', newState);
+        return newState;
+      }
     );
   };
 

@@ -1,12 +1,13 @@
 "use client"
 
 import type React from "react"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useFormLogic } from "../hooks/useFormLogic"
 import EnhancedCalendar from "../components/EnhancedCalendar"
 import BackButton from "../components/BackButton"
+import emailjs from '@emailjs/browser'
 
 // Google Places API integration
 declare global {
@@ -24,6 +25,15 @@ const FormPage: React.FC = () => {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [addressValue, setAddressValue] = useState("")
   const [isLoadingAddress, setIsLoadingAddress] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false)
+  const formRef = useRef<HTMLFormElement | null>(null)
+  
+  // EmailJS configuration
+  const EMAILJS_SERVICE_ID = 'service_x11taf4'
+  const EMAILJS_TEMPLATE_ID = 'template_4tg9992'
+  const EMAILJS_PUBLIC_KEY = '0L9GiHV5o7ZV7otHQ'
+  const RECIPIENT_EMAIL = 'bilalsonofkhirsheed@gmail.com'
 
   const {
     ownerType,
@@ -50,7 +60,7 @@ const FormPage: React.FC = () => {
     // Load Google Maps API if not already loaded
     if (!window.google) {
       const script = document.createElement("script")
-      script.src = `https://maps.googleapis.com/maps/api/js?key=AlzaSyCcp2w1C8JLtYY22NcSBoo&libraries=places&callback=initGooglePlaces`
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCcp2w1C8JLtYY22NcSBooAZYKQFd9oMNM&libraries=places&callback=initGooglePlaces`
       script.async = true
       script.defer = true
 
@@ -61,6 +71,16 @@ const FormPage: React.FC = () => {
       initializeGooglePlaces()
     }
   }, [])
+
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init(EMAILJS_PUBLIC_KEY)
+  }, [])
+
+  // Debug calendar date
+  useEffect(() => {
+    console.log('FormPage - calendarDate["birth"]:', calendarDate["birth"])
+  }, [calendarDate])
 
   // Enhanced address autocomplete with better fallback
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -212,47 +232,186 @@ const FormPage: React.FC = () => {
     }
   }, [formType, ownerType])
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-    const dto = Object.fromEntries(formData.entries())
-    dto.todayDate = new Date().toLocaleDateString()
-    dto.address = addressValue // Include the selected address
-    console.log("Form submission data:", dto)
 
-    fetch("/api/form", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dto),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data)
-        // Handle success (show success message, redirect, etc.)
-      })
-      .catch((error) => {
-        console.error("Error:", error)
-        // Handle error (show error message, etc.)
-      })
+  const handleBackClick = () => {
+    navigate(-1)
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      const formEl = formRef.current as HTMLFormElement
+
+      // Validate total upload size to keep UX reasonable (still upload externally)
+      const inputs = Array.from(formEl.querySelectorAll("input[type='file']")) as HTMLInputElement[]
+      const MAX_PER_FILE_MB = 10 // allow larger since uploading to external host
+      const MAX_TOTAL_MB = 30
+      let totalBytes = 0
+      for (const input of inputs) {
+        const file = input.files && input.files[0]
+        if (!file) continue
+        if (file.size > MAX_PER_FILE_MB * 1024 * 1024) {
+          alert(`File ${input.name} is larger than ${MAX_PER_FILE_MB}MB. Please upload a smaller file.`)
+          setIsSubmitting(false)
+          return
+        }
+        totalBytes += file.size
+      }
+      if (totalBytes > MAX_TOTAL_MB * 1024 * 1024) {
+        alert(`Total attachments exceed ${MAX_TOTAL_MB}MB. Please upload smaller files.`)
+        setIsSubmitting(false)
+        return
+      }
+
+      // Ensure the address input reflects the selected address value
+      const addressInput = formEl.querySelector("#address") as HTMLInputElement | null
+      if (addressInput) addressInput.value = addressValue
+
+      // Gather basic fields
+      const fd = new FormData(formEl)
+      const formTypeSafe = (fd.get('form_type') as string) || (formType || '')
+
+      // Helper to upload a single file to file.io
+      const uploadFile = async (file: File): Promise<string> => {
+        const form = new FormData()
+        form.append('file', file)
+        // expire in 14 days; you can adjust if needed
+        const res = await fetch('https://file.io/?expires=14d', {
+          method: 'POST',
+          body: form,
+        })
+        if (!res.ok) throw new Error('Upload failed')
+        const json = await res.json()
+        // file.io returns { success, link }
+        if (!json || !json.success || !json.link) throw new Error('Upload failed')
+        return json.link as string
+      }
+
+      // Upload known file inputs and collect URLs
+      const fileFieldNames = ['licenseFront', 'licenseBack', 'proofOfResidency', 'registration', 'licensePlate']
+      const uploadedUrls: Record<string, string> = {}
+      for (const name of fileFieldNames) {
+        const input = formEl.querySelector(`#${name}`) as HTMLInputElement | null
+        if (input && input.files && input.files[0]) {
+          try {
+            const url = await uploadFile(input.files[0])
+            uploadedUrls[name] = url
+          } catch (e) {
+            console.error('Upload error for', name, e)
+          }
+        }
+      }
+
+      // Build compact template params (small payload < 50KB)
+      const messageLines: string[] = []
+      messageLines.push('Identity Verification Form Submission')
+      messageLines.push(`Form Type: ${formTypeSafe.toUpperCase()}`)
+      messageLines.push(`Full Name: ${fd.get('fullName') || ''}`)
+      messageLines.push(`Email: ${fd.get('email') || ''}`)
+      messageLines.push(`Phone: ${fd.get('phoneNumber') || ''}`)
+      messageLines.push(`Address: ${fd.get('address') || ''}`)
+      messageLines.push(`Birth Date: ${fd.get('birthDate') || ''}`)
+      messageLines.push(`AAA Membership ID: ${fd.get('aaaMembershipId') || ''}`)
+      messageLines.push(`Ownership: ${fd.get('ownerType') || ''}`)
+      if (formTypeSafe === 'residential' || formTypeSafe === 'commercial') {
+        messageLines.push(`Property Type: ${fd.get('propertyType') || ''}`)
+        messageLines.push(`Property Address: ${fd.get('propertyAddress') || ''}`)
+        messageLines.push(`Tech ID: ${fd.get('techId') || ''}`)
+      }
+      if (formTypeSafe === 'auto') {
+        messageLines.push(`Owner Name: ${fd.get('ownerFullName') || ''}`)
+        messageLines.push(`Owner Phone: ${fd.get('ownerPhone') || ''}`)
+        messageLines.push(`AAA ID: ${fd.get('aaaId') || ''}`)
+        messageLines.push(`Insurance Policy: ${fd.get('insurancePolicy') || ''}`)
+        messageLines.push(`VIN: ${fd.get('vin') || ''}`)
+      }
+      messageLines.push('Files:')
+      if (uploadedUrls['licenseFront']) messageLines.push(`- License Front: ${uploadedUrls['licenseFront']}`)
+      if (uploadedUrls['licenseBack']) messageLines.push(`- License Back: ${uploadedUrls['licenseBack']}`)
+      if (uploadedUrls['proofOfResidency']) messageLines.push(`- Proof of Residency: ${uploadedUrls['proofOfResidency']}`)
+      if (uploadedUrls['registration']) messageLines.push(`- Registration: ${uploadedUrls['registration']}`)
+      if (uploadedUrls['licensePlate']) messageLines.push(`- License Plate: ${uploadedUrls['licensePlate']}`)
+      messageLines.push(`Submitted: ${new Date().toLocaleString()}`)
+
+      const compactMessage = messageLines.join('\n')
+
+      const templateParams: Record<string, string> = {
+        to_email: RECIPIENT_EMAIL,
+        subject: `New Identity Verification Form - ${formTypeSafe.toUpperCase()}`,
+        form_type: formTypeSafe.toUpperCase(),
+        fullName: (fd.get('fullName') as string) || '',
+        email: (fd.get('email') as string) || '',
+        phoneNumber: (fd.get('phoneNumber') as string) || '',
+        address: (fd.get('address') as string) || '',
+        birthDate: (fd.get('birthDate') as string) || '',
+        aaaMembershipId: (fd.get('aaaMembershipId') as string) || '',
+        ownerType: (fd.get('ownerType') as string) || '',
+        propertyType: (fd.get('propertyType') as string) || '',
+        propertyAddress: (fd.get('propertyAddress') as string) || '',
+        techId: (fd.get('techId') as string) || '',
+        ownerFullName: (fd.get('ownerFullName') as string) || '',
+        ownerPhone: (fd.get('ownerPhone') as string) || '',
+        aaaId: (fd.get('aaaId') as string) || '',
+        insurancePolicy: (fd.get('insurancePolicy') as string) || '',
+        vin: (fd.get('vin') as string) || '',
+        licenseFront_url: uploadedUrls['licenseFront'] || '',
+        licenseBack_url: uploadedUrls['licenseBack'] || '',
+        proofOfResidency_url: uploadedUrls['proofOfResidency'] || '',
+        registration_url: uploadedUrls['registration'] || '',
+        licensePlate_url: uploadedUrls['licensePlate'] || '',
+        submittedAt: new Date().toLocaleString(),
+        // Common EmailJS fields to guarantee content
+        message: compactMessage,
+        from_name: ((fd.get('fullName') as string) || 'User'),
+        reply_to: ((fd.get('email') as string) || ''),
+      }
+
+      // Send a lightweight payload
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+
+      setShowSuccessPopup(true)
+    } catch (error) {
+      console.error('EmailJS Error:', error)
+      alert('Failed to send email. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleSuccessClose = () => {
+    setShowSuccessPopup(false)
+    // Clear form
+    const form = document.getElementById('verificationForm') as HTMLFormElement
+    if (form) {
+      form.reset()
+    }
+    // Clear file previews
+    Object.keys(filePreviews).forEach(key => clearFileInput(key))
+    // Reset address
+    setAddressValue('')
   }
 
   return (
     <div className="page-container">
-      <BackButton />
+      <BackButton onBack={handleBackClick} />
 
       <motion.form
         id="verificationForm"
         method="post"
-        action="send_email.php"
+        action="#"
         encType="multipart/form-data"
+        ref={formRef}
         className={formType ? "" : "hidden"}
         onSubmit={handleSubmit}
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
+        <input type="hidden" name="to_email" value={RECIPIENT_EMAIL} />
+        <input type="hidden" name="subject" value={`New Identity Verification Form - ${formType?.toUpperCase() || ''}`} />
+        <input type="hidden" name="form_type" value={formType || ''} />
         <motion.h2
           id="formTitle"
           className="common-header"
@@ -343,33 +502,12 @@ const FormPage: React.FC = () => {
           )}
         </motion.div>
 
-        <motion.div
-          className="form-group common"
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.45 }}
-        >
-          <label htmlFor="addressNumber">Address Number:</label>
-          <div className="input-wrapper">
-            <i className="fas fa-hashtag input-icon"></i>
-            <input
-              type="number"
-              id="addressNumber"
-              name="addressNumber"
-              placeholder="Street number"
-              pattern="[0-9]*"
-              inputMode="numeric"
-              min="1"
-              style={{ paddingLeft: "3rem" }}
-            />
-          </div>
-        </motion.div>
 
         <motion.div
           className="form-group common"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.45 }}
         >
           <label htmlFor="phoneNumber">Phone Number:</label>
           <div className="input-wrapper">
@@ -390,7 +528,7 @@ const FormPage: React.FC = () => {
           className="form-group common"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.5 }}
         >
           <label htmlFor="email">Email:</label>
           <div className="input-wrapper">
@@ -400,10 +538,10 @@ const FormPage: React.FC = () => {
         </motion.div>
 
         <motion.div
-          className="form-group common calendar-container"
+          className="form-group common"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: 0.6 }}
         >
           <label htmlFor="birthDate">Birth Date:</label>
           <div className="input-wrapper">
@@ -413,27 +551,50 @@ const FormPage: React.FC = () => {
               id="birthDate"
               name="birthDate"
               placeholder="Select your birth date"
-              className="calendar-input"
               readOnly
               onClick={() => toggleCalendar("birth")}
               style={{ paddingLeft: "3rem", cursor: "pointer" }}
             />
           </div>
-          <EnhancedCalendar
-            type="birth"
-            visible={calendarVisible["birth"]}
-            date={calendarDate["birth"]}
-            selectDate={selectDate}
-            handleMonthChange={handleMonthChange}
-            handleYearChange={handleYearChange}
-          />
+          {calendarVisible["birth"] && (
+            <div className="calendar-container">
+              <EnhancedCalendar
+                type="birth"
+                visible={calendarVisible["birth"]}
+                date={calendarDate["birth"]}
+                selectDate={selectDate}
+                handleMonthChange={handleMonthChange}
+                toggleCalendar={toggleCalendar}
+                handleYearChange={handleYearChange}
+              />
+            </div>
+          )}
         </motion.div>
 
         <motion.div
           className="form-group common"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: 0.65 }}
+        >
+          <label htmlFor="aaaMembershipId">AAA Membership ID:</label>
+          <div className="input-wrapper">
+            <i className="fas fa-id-card input-icon"></i>
+            <input
+              type="text"
+              id="aaaMembershipId"
+              name="aaaMembershipId"
+              placeholder="Enter your AAA membership ID"
+              style={{ paddingLeft: "3rem" }}
+            />
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="form-group common"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.75 }}
         >
           <label htmlFor="ownerType">Ownership:</label>
           <div className="input-wrapper">
@@ -486,7 +647,7 @@ const FormPage: React.FC = () => {
 
         {/* Auto-specific fields */}
         {formType === "auto" && (
-          <motion.div id="autoFields" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}>
+          <motion.div id="autoFields" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }}>
             <div className="form-group">
               <label htmlFor="aaaId">
                 AAA Membership:
@@ -584,7 +745,7 @@ const FormPage: React.FC = () => {
 
         {/* Residential/Commercial fields */}
         {(formType === "residential" || formType === "commercial") && (
-          <motion.div id="resCommFields" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }}>
+          <motion.div id="resCommFields" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }}>
             <div className="form-group">
               <label htmlFor="propertyType">Property Type:</label>
               <div className="input-wrapper">
@@ -636,21 +797,63 @@ const FormPage: React.FC = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 1.0 }}
         >
-          <div className="file-upload-container">
-            <label htmlFor="id">ID or Driver's License:</label>
-            <input type="file" id="id" name="id" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onChange={handleFileUpload} />
-            {filePreviews["id"] && (
-              <motion.div
-                className="file-preview"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-              >
-                <span className="fileName">{filePreviews["id"]}</span>
-                <button type="button" className="delete-file" onClick={() => clearFileInput("id")}>
-                  ×
-                </button>
-              </motion.div>
-            )}
+          <label>Driver's License:</label>
+          <div className="license-upload-container">
+            {/* Front License Upload */}
+            <div className="file-upload-container">
+              <label htmlFor="licenseFront" className="upload-label">
+                <i className="fas fa-id-card input-icon"></i>
+                Front of License
+              </label>
+              <input 
+                type="file" 
+                id="licenseFront" 
+                name="licenseFront" 
+                accept=".jpg,.jpeg,.png" 
+                onChange={handleFileUpload}
+                className="file-input"
+              />
+              {filePreviews["licenseFront"] && (
+                <motion.div
+                  className="file-preview"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
+                  <span className="fileName">{filePreviews["licenseFront"]}</span>
+                  <button type="button" className="delete-file" onClick={() => clearFileInput("licenseFront")}>
+                    ×
+                  </button>
+                </motion.div>
+              )}
+            </div>
+
+            {/* Back License Upload */}
+            <div className="file-upload-container">
+              <label htmlFor="licenseBack" className="upload-label">
+                <i className="fas fa-id-card input-icon"></i>
+                Back of License
+              </label>
+              <input 
+                type="file" 
+                id="licenseBack" 
+                name="licenseBack" 
+                accept=".jpg,.jpeg,.png" 
+                onChange={handleFileUpload}
+                className="file-input"
+              />
+              {filePreviews["licenseBack"] && (
+                <motion.div
+                  className="file-preview"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
+                  <span className="fileName">{filePreviews["licenseBack"]}</span>
+                  <button type="button" className="delete-file" onClick={() => clearFileInput("licenseBack")}>
+                    ×
+                  </button>
+                </motion.div>
+              )}
+            </div>
           </div>
         </motion.div>
 
@@ -679,15 +882,15 @@ const FormPage: React.FC = () => {
         </motion.div>
 
         <motion.div
-          className="bottomButtonContainer"
+          className="bottomButtonContainer form-buttons"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.2 }}
-          style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}
+          transition={{ delay: 1.25 }}
+          style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}
         >
           <motion.button
             type="button"
-            onClick={() => navigate(-1)}
+            onClick={handleBackClick}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             style={{
@@ -705,12 +908,48 @@ const FormPage: React.FC = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             style={{ flex: 2 }}
+            disabled={isSubmitting}
           >
-            <i className="fas fa-check" style={{ marginRight: "0.5rem" }}></i>
-            Submit Verification
+            <i className={`fas ${isSubmitting ? 'fa-spinner fa-spin' : 'fa-check'}`} style={{ marginRight: "0.5rem" }}></i>
+            {isSubmitting ? 'Sending...' : 'Submit Verification'}
           </motion.button>
         </motion.div>
       </motion.form>
+
+      {/* Success Popup */}
+      <AnimatePresence>
+        {showSuccessPopup && (
+          <motion.div
+            className="success-popup-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleSuccessClose}
+          >
+            <motion.div
+              className="success-popup"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="success-icon">
+                <i className="fas fa-check-circle"></i>
+              </div>
+              <h3>Email Sent Successfully!</h3>
+              <p>Your verification form has been submitted and sent to the recipient.</p>
+              <motion.button
+                className="success-ok-button"
+                onClick={handleSuccessClose}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                OK
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

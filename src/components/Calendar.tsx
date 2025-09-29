@@ -11,6 +11,7 @@ interface CalendarProps {
   selectDate: (type: string, date: string) => void
   handleMonthChange: (type: string, event: React.ChangeEvent<HTMLSelectElement>) => void
   handleYearChange: (type: string, event: React.ChangeEvent<HTMLSelectElement>) => void
+  toggleCalendar: (type: string) => void
 }
 
 const Calendar: React.FC<CalendarProps> = ({
@@ -20,6 +21,7 @@ const Calendar: React.FC<CalendarProps> = ({
   selectDate,
   handleMonthChange,
   handleYearChange,
+  toggleCalendar,
 }) => {
   const { month, year } = date
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
@@ -45,23 +47,116 @@ const Calendar: React.FC<CalendarProps> = ({
 
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
+  // Check if month navigation is allowed
+  const canNavigateMonth = (direction: number) => {
+    const currentDate = new Date()
+    const currentYear = currentDate.getFullYear()
+    const currentMonth = currentDate.getMonth()
+    
+    const newMonth = month + direction
+    let newYear = year
+    
+    if (newMonth < 0) {
+      newYear = year - 1
+      const newMonthValue = 11
+      return !(newYear > currentYear || (newYear === currentYear && newMonthValue > currentMonth))
+    } else if (newMonth > 11) {
+      newYear = year + 1
+      const newMonthValue = 0
+      return !(newYear > currentYear || (newYear === currentYear && newMonthValue > currentMonth))
+    } else {
+      return !(year > currentYear || (year === currentYear && newMonth > currentMonth))
+    }
+  }
+
+  // Check if year navigation is allowed
+  const canNavigateYear = (direction: number) => {
+    const currentDate = new Date()
+    const currentYear = currentDate.getFullYear()
+    const currentMonth = currentDate.getMonth()
+    
+    const newYear = year + direction
+    return !(newYear > currentYear || (newYear === currentYear && month > currentMonth))
+  }
+
+  const isFutureDate = (day: number) => {
+    const currentDate = new Date()
+    const currentYear = currentDate.getFullYear()
+    const currentMonth = currentDate.getMonth()
+    const currentDay = currentDate.getDate()
+    
+    return year > currentYear || (year === currentYear && month > currentMonth) || 
+           (year === currentYear && month === currentMonth && day > currentDay)
+  }
+
   const handleDateSelect = (day: number) => {
+    // Check if the selected date is in the future
+    if (isFutureDate(day)) {
+      return // Don't allow future date selection
+    }
+    
     setSelectedDay(day)
     selectDate(type, `${month + 1}/${day}/${year}`)
   }
 
-  const navigateMonth = (direction: number) => {
+  const navigateMonth = (direction: number, event: React.MouseEvent) => {
+    event.preventDefault()
+    event.stopPropagation()
+    event.nativeEvent.stopImmediatePropagation()
+    
+    const currentDate = new Date()
+    const currentYear = currentDate.getFullYear()
+    const currentMonth = currentDate.getMonth()
+    
     const newMonth = month + direction
+    let newYear = year
+    
     if (newMonth < 0) {
-      handleYearChange(type, { target: { value: (year - 1).toString() } } as any)
-      handleMonthChange(type, { target: { value: "11" } } as any)
+      newYear = year - 1
+      const newMonthValue = 11
+      // Check if the new date is in the future
+      if (newYear > currentYear || (newYear === currentYear && newMonthValue > currentMonth)) {
+        return // Don't navigate to future
+      }
+      handleYearChange(type, { target: { value: newYear.toString() } } as any)
+      handleMonthChange(type, { target: { value: newMonthValue.toString() } } as any)
     } else if (newMonth > 11) {
-      handleYearChange(type, { target: { value: (year + 1).toString() } } as any)
-      handleMonthChange(type, { target: { value: "0" } } as any)
+      newYear = year + 1
+      const newMonthValue = 0
+      // Check if the new date is in the future
+      if (newYear > currentYear || (newYear === currentYear && newMonthValue > currentMonth)) {
+        return // Don't navigate to future
+      }
+      handleYearChange(type, { target: { value: newYear.toString() } } as any)
+      handleMonthChange(type, { target: { value: newMonthValue.toString() } } as any)
     } else {
+      // Check if the new date is in the future
+      if (year > currentYear || (year === currentYear && newMonth > currentMonth)) {
+        return // Don't navigate to future
+      }
       handleMonthChange(type, { target: { value: newMonth.toString() } } as any)
     }
   }
+
+  const navigateYear = (direction: number, event: React.MouseEvent) => {
+    event.preventDefault()
+    event.stopPropagation()
+    event.nativeEvent.stopImmediatePropagation()
+    
+    const currentDate = new Date()
+    const currentYear = currentDate.getFullYear()
+    const currentMonth = currentDate.getMonth()
+    
+    const newYear = year + direction
+    
+    // Check if the new year is in the future
+    if (newYear > currentYear || (newYear === currentYear && month > currentMonth)) {
+      return // Don't navigate to future
+    }
+    
+    handleYearChange(type, { target: { value: newYear.toString() } } as any)
+  }
+
 
   const renderCalendarDays = () => {
     const days = []
@@ -85,10 +180,10 @@ const Calendar: React.FC<CalendarProps> = ({
       days.push(
         <motion.div
           key={day}
-          className={`calendar-day ${selectedDay === day ? "selected" : ""}`}
+          className={`calendar-day ${selectedDay === day ? "selected" : ""} ${isFutureDate(day) ? "future" : ""}`}
           onClick={() => handleDateSelect(day)}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+          whileHover={!isFutureDate(day) ? { scale: 1.1 } : {}}
+          whileTap={!isFutureDate(day) ? { scale: 0.9 } : {}}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: day * 0.01 }}
@@ -126,26 +221,106 @@ const Calendar: React.FC<CalendarProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: -20 }}
           transition={{ duration: 0.3 }}
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            e.nativeEvent.stopImmediatePropagation()
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            e.nativeEvent.stopImmediatePropagation()
+          }}
         >
-          <div className="calendar-header">
+          {/* Mobile close button */}
+          <div className="mobile-close-btn">
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                toggleCalendar(type)
+              }}
+              className="close-button"
+              title="Close Calendar"
+            >
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
+          <div 
+            className="calendar-header"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              e.nativeEvent.stopImmediatePropagation()
+            }}
+            onMouseDown={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              e.nativeEvent.stopImmediatePropagation()
+            }}
+          >
             <motion.button
-              className="calendar-nav"
-              onClick={() => navigateMonth(-1)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              className={`calendar-nav ${!canNavigateMonth(-1) ? 'disabled' : ''}`}
+              onClick={canNavigateMonth(-1) ? (e) => navigateMonth(-1, e) : undefined}
+              whileHover={canNavigateMonth(-1) ? { scale: 1.1 } : {}}
+              whileTap={canNavigateMonth(-1) ? { scale: 0.9 } : {}}
+              type="button"
+              disabled={!canNavigateMonth(-1)}
+              title={!canNavigateMonth(-1) ? "Cannot go to future months" : "Previous Month"}
             >
               <i className="fas fa-chevron-left"></i>
             </motion.button>
 
             <div className="calendar-title">
-              {months[month]} {year}
+              <div className="calendar-month-year">
+                <h3>
+                  {months[month]} {year}
+                </h3>
+                <div 
+                  className="year-navigation"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <motion.button
+                    className={`year-nav-btn ${!canNavigateYear(-1) ? 'disabled' : ''}`}
+                    onClick={canNavigateYear(-1) ? (e) => navigateYear(-1, e) : undefined}
+                    whileHover={canNavigateYear(-1) ? { scale: 1.1 } : {}}
+                    whileTap={canNavigateYear(-1) ? { scale: 0.9 } : {}}
+                    type="button"
+                    disabled={!canNavigateYear(-1)}
+                    title={!canNavigateYear(-1) ? "Cannot go to future years" : "Previous Year"}
+                  >
+                    <i className="fas fa-angle-double-left"></i>
+                    <span className="sr-only">Previous Year</span>
+                  </motion.button>
+                  
+                  <div className="year-display">
+                    {year}
+                  </div>
+                  
+                  <motion.button
+                    className={`year-nav-btn ${!canNavigateYear(1) ? 'disabled' : ''}`}
+                    onClick={canNavigateYear(1) ? (e) => navigateYear(1, e) : undefined}
+                    whileHover={canNavigateYear(1) ? { scale: 1.1 } : {}}
+                    whileTap={canNavigateYear(1) ? { scale: 0.9 } : {}}
+                    type="button"
+                    disabled={!canNavigateYear(1)}
+                    title={!canNavigateYear(1) ? "Cannot go to future years" : "Next Year"}
+                  >
+                    <i className="fas fa-angle-double-right"></i>
+                    <span className="sr-only">Next Year</span>
+                  </motion.button>
+                </div>
+              </div>
             </div>
 
             <motion.button
-              className="calendar-nav"
-              onClick={() => navigateMonth(1)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+              className={`calendar-nav ${!canNavigateMonth(1) ? 'disabled' : ''}`}
+              onClick={canNavigateMonth(1) ? (e) => navigateMonth(1, e) : undefined}
+              whileHover={canNavigateMonth(1) ? { scale: 1.1 } : {}}
+              whileTap={canNavigateMonth(1) ? { scale: 0.9 } : {}}
+              type="button"
+              disabled={!canNavigateMonth(1)}
+              title={!canNavigateMonth(1) ? "Cannot go to future months" : "Next Month"}
             >
               <i className="fas fa-chevron-right"></i>
             </motion.button>
