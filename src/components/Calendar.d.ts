@@ -9,6 +9,7 @@ interface CalendarProps {
     selectDate: (type: string, date: string) => void;
     handleMonthChange: (type: string, event: React.ChangeEvent<HTMLSelectElement>) => void;
     handleYearChange: (type: string, event: React.ChangeEvent<HTMLSelectElement>) => void;
+    toggleCalendar: (type: string) => void;
 }
 declare const Calendar: React.FC<CalendarProps>;
 export default Calendar;

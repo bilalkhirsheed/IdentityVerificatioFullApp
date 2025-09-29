@@ -14,6 +14,7 @@ interface EnhancedCalendarProps {
     selectDate: (type: string, date: string) => void;
     handleMonthChange: (type: string, event: React.ChangeEvent<HTMLSelectElement>) => void;
     handleYearChange: (type: string, event: React.ChangeEvent<HTMLSelectElement>) => void;
+    toggleCalendar: (type: string) => void;
     birthdays?: Birthday[];
 }
 declare const EnhancedCalendar: React.FC<EnhancedCalendarProps>;
