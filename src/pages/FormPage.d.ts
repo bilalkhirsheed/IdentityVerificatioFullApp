@@ -7,4 +7,5 @@ declare global {
 }
 declare const FormPage: React.FC;
 export default FormPage;
+export default FormPage;
 //# sourceMappingURL=FormPage.d.ts.map
