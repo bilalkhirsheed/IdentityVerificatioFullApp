@@ -557,15 +557,15 @@ const FormPage: React.FC = () => {
           </div>
           {calendarVisible["birth"] && (
             <div className="calendar-container">
-              <EnhancedCalendar
-                type="birth"
-                visible={calendarVisible["birth"]}
-                date={calendarDate["birth"]}
-                selectDate={selectDate}
-                handleMonthChange={handleMonthChange}
+          <EnhancedCalendar
+            type="birth"
+            visible={calendarVisible["birth"]}
+            date={calendarDate["birth"]}
+            selectDate={selectDate}
+            handleMonthChange={handleMonthChange}
                 toggleCalendar={toggleCalendar}
-                handleYearChange={handleYearChange}
-              />
+            handleYearChange={handleYearChange}
+          />
             </div>
           )}
         </motion.div>
@@ -811,7 +811,7 @@ const FormPage: React.FC = () => {
             </div>
 
             {/* Back License Upload */}
-            <div className="file-upload-container">
+          <div className="file-upload-container">
               <label htmlFor="licenseBack" className="upload-label">
                 <i className="fas fa-id-card input-icon"></i>
                 Back of License
@@ -825,17 +825,17 @@ const FormPage: React.FC = () => {
                 className="file-input"
               />
               {filePreviews["licenseBack"] && (
-                <motion.div
-                  className="file-preview"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                >
+              <motion.div
+                className="file-preview"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+              >
                   <span className="fileName">{filePreviews["licenseBack"]}</span>
                   <button type="button" className="delete-file" onClick={() => clearFileInput("licenseBack")}>
-                    ×
-                  </button>
-                </motion.div>
-              )}
+                  ×
+                </button>
+              </motion.div>
+            )}
             </div>
           </div>
         </motion.div>
@@ -938,3 +938,653 @@ const FormPage: React.FC = () => {
 }
 
 export default FormPage
+
+              id="aaaMembershipId"
+              name="aaaMembershipId"
+              placeholder="Enter your AAA membership ID"
+              style={{ paddingLeft: "3rem" }}
+            />
+          </div>
+        </motion.div>
+
+
+
+        <motion.div
+
+          className="form-group common"
+
+          initial={{ opacity: 0, x: -50 }}
+
+          animate={{ opacity: 1, x: 0 }}
+
+          transition={{ delay: 0.75 }}
+        >
+
+          <label htmlFor="ownerType">Ownership:</label>
+
+          <div className="input-wrapper">
+
+            <i className="fas fa-user-tag input-icon"></i>
+
+            <select id="ownerType" name="ownerType" onChange={handleOwnerTypeChange} style={{ paddingLeft: "3rem" }}>
+
+              <option value="">Select ownership type...</option>
+
+              <option value="myself">Myself</option>
+
+              <option value="other">Other</option>
+
+            </select>
+
+          </div>
+
+        </motion.div>
+
+
+
+        {ownerType === "other" && (
+
+          <motion.div
+
+            id="ownerFields"
+
+            initial={{ opacity: 0, height: 0 }}
+
+            animate={{ opacity: 1, height: "auto" }}
+
+            transition={{ duration: 0.3 }}
+
+          >
+
+            <div className="form-group">
+
+              <label htmlFor="ownerFullName">Owner's Name:</label>
+
+              <div className="input-wrapper">
+
+                <i className="fas fa-user input-icon"></i>
+
+                <input
+
+                  type="text"
+
+                  id="ownerFullName"
+
+                  name="ownerFullName"
+
+                  placeholder="Owner's full name"
+
+                  style={{ paddingLeft: "3rem" }}
+
+                />
+
+              </div>
+
+            </div>
+
+            <div className="form-group">
+
+              <label htmlFor="ownerPhone">Owner's Phone:</label>
+
+              <div className="input-wrapper">
+
+                <i className="fas fa-phone input-icon"></i>
+
+                <input
+
+                  type="tel"
+
+                  id="ownerPhone"
+
+                  name="ownerPhone"
+
+                  pattern="[0-9]*"
+
+                  inputMode="numeric"
+
+                  placeholder="(000) 000-0000"
+
+                  style={{ paddingLeft: "3rem" }}
+
+                />
+
+              </div>
+
+            </div>
+
+          </motion.div>
+
+        )}
+
+
+
+        {/* Auto-specific fields */}
+
+        {formType === "auto" && (
+
+          <motion.div id="autoFields" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }}>
+            <div className="form-group">
+
+              <label htmlFor="aaaId">
+
+                AAA Membership:
+
+                <br />
+
+                <small>(Leave blank if you don't have AAA membership)</small>
+
+              </label>
+
+              <div className="input-wrapper">
+
+                <i className="fas fa-id-card input-icon"></i>
+
+                <input
+
+                  type="text"
+
+                  id="aaaId"
+
+                  name="aaaId"
+
+                  placeholder="AAA membership number"
+
+                  style={{ paddingLeft: "3rem" }}
+
+                />
+
+              </div>
+
+            </div>
+
+
+
+            <div className="form-group">
+
+              <label htmlFor="insurancePolicy">Insurance Policy Number:</label>
+
+              <div className="input-wrapper">
+
+                <i className="fas fa-shield-alt input-icon"></i>
+
+                <input
+
+                  type="text"
+
+                  id="insurancePolicy"
+
+                  name="insurancePolicy"
+
+                  placeholder="Policy number"
+
+                  style={{ paddingLeft: "3rem" }}
+
+                />
+
+              </div>
+
+            </div>
+
+
+
+            <div className="form-group">
+
+              <label htmlFor="vin">VIN:</label>
+
+              <div className="input-wrapper">
+
+                <i className="fas fa-car input-icon"></i>
+
+                <input
+
+                  type="text"
+
+                  id="vin"
+
+                  name="vin"
+
+                  placeholder="17-character VIN"
+
+                  maxLength={17}
+
+                  style={{ paddingLeft: "3rem" }}
+
+                />
+
+              </div>
+
+            </div>
+
+
+
+            <div className="file-upload-container">
+
+              <label htmlFor="registration">Registration (file upload):</label>
+
+              <input
+
+                type="file"
+
+                id="registration"
+
+                name="registration"
+
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+
+                onChange={handleFileUpload}
+
+              />
+
+              {filePreviews["registration"] && (
+
+                <motion.div
+
+                  className="file-preview"
+
+                  initial={{ opacity: 0, scale: 0.9 }}
+
+                  animate={{ opacity: 1, scale: 1 }}
+
+                >
+
+                  <span className="fileName">{filePreviews["registration"]}</span>
+
+                  <button type="button" className="delete-file" onClick={() => clearFileInput("registration")}>
+
+                    ×
+
+                  </button>
+
+                </motion.div>
+
+              )}
+
+            </div>
+
+
+
+            <div className="file-upload-container">
+
+              <label htmlFor="licensePlate">License Plate Photo:</label>
+
+              <input
+
+                type="file"
+
+                id="licensePlate"
+
+                name="licensePlate"
+
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+
+                onChange={handleFileUpload}
+
+              />
+
+              {filePreviews["licensePlate"] && (
+
+                <motion.div
+
+                  className="file-preview"
+
+                  initial={{ opacity: 0, scale: 0.9 }}
+
+                  animate={{ opacity: 1, scale: 1 }}
+
+                >
+
+                  <span className="fileName">{filePreviews["licensePlate"]}</span>
+
+                  <button type="button" className="delete-file" onClick={() => clearFileInput("licensePlate")}>
+
+                    ×
+
+                  </button>
+
+                </motion.div>
+
+              )}
+
+            </div>
+
+          </motion.div>
+
+        )}
+
+
+
+        {/* Residential/Commercial fields */}
+
+        {(formType === "residential" || formType === "commercial") && (
+
+          <motion.div id="resCommFields" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }}>
+            <div className="form-group">
+
+              <label htmlFor="propertyType">Property Type:</label>
+
+              <div className="input-wrapper">
+
+                <i className="fas fa-building input-icon"></i>
+
+                <select id="propertyType" name="propertyType" style={{ paddingLeft: "3rem" }}>
+
+                  <option value="">Select property type...</option>
+
+                  <option value="singleFamily">Single-family</option>
+
+                  <option value="condo">Condo</option>
+
+                  <option value="apartment">Apartment</option>
+
+                  <option value="office">Office</option>
+
+                  <option value="retail">Retail</option>
+
+                  <option value="industrial">Industrial</option>
+
+                </select>
+
+              </div>
+
+            </div>
+
+
+
+            <div className="file-upload-container">
+
+              <label htmlFor="proofOfResidency">
+
+                Proof of Residency:
+
+                <br />
+
+                <small>(e.g., utility bill, lease agreement)</small>
+
+              </label>
+
+              <input
+
+                type="file"
+
+                id="proofOfResidency"
+
+                name="proofOfResidency"
+
+                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+
+                onChange={handleFileUpload}
+
+              />
+
+              {filePreviews["proofOfResidency"] && (
+
+                <motion.div
+
+                  className="file-preview"
+
+                  initial={{ opacity: 0, scale: 0.9 }}
+
+                  animate={{ opacity: 1, scale: 1 }}
+
+                >
+
+                  <span className="fileName">{filePreviews["proofOfResidency"]}</span>
+
+                  <button type="button" className="delete-file" onClick={() => clearFileInput("proofOfResidency")}>
+
+                    ×
+
+                  </button>
+
+                </motion.div>
+
+              )}
+
+            </div>
+
+          </motion.div>
+
+        )}
+
+
+
+        <motion.div
+
+          className="form-group common"
+
+          initial={{ opacity: 0, x: -50 }}
+
+          animate={{ opacity: 1, x: 0 }}
+
+          transition={{ delay: 1.0 }}
+
+        >
+
+          <label>Driver's License:</label>
+          <div className="license-upload-container">
+            {/* Front License Upload */}
+            <div className="file-upload-container">
+              <label htmlFor="licenseFront" className="upload-label">
+                <i className="fas fa-id-card input-icon"></i>
+                Front of License
+              </label>
+              <input 
+                type="file" 
+                id="licenseFront" 
+                name="licenseFront" 
+                accept=".jpg,.jpeg,.png" 
+                onChange={handleFileUpload}
+                className="file-input"
+              />
+              {filePreviews["licenseFront"] && (
+                <motion.div
+                  className="file-preview"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
+                  <span className="fileName">{filePreviews["licenseFront"]}</span>
+                  <button type="button" className="delete-file" onClick={() => clearFileInput("licenseFront")}>
+                    ×
+                  </button>
+                </motion.div>
+              )}
+            </div>
+
+            {/* Back License Upload */}
+          <div className="file-upload-container">
+
+              <label htmlFor="licenseBack" className="upload-label">
+                <i className="fas fa-id-card input-icon"></i>
+                Back of License
+              </label>
+              <input 
+                type="file" 
+                id="licenseBack" 
+                name="licenseBack" 
+                accept=".jpg,.jpeg,.png" 
+                onChange={handleFileUpload}
+                className="file-input"
+              />
+              {filePreviews["licenseBack"] && (
+              <motion.div
+
+                className="file-preview"
+
+                initial={{ opacity: 0, scale: 0.9 }}
+
+                animate={{ opacity: 1, scale: 1 }}
+
+              >
+
+                  <span className="fileName">{filePreviews["licenseBack"]}</span>
+                  <button type="button" className="delete-file" onClick={() => clearFileInput("licenseBack")}>
+                  ×
+
+                </button>
+
+              </motion.div>
+
+            )}
+
+            </div>
+          </div>
+
+        </motion.div>
+
+
+
+        <motion.div
+
+          className="form-group common"
+
+          initial={{ opacity: 0, x: -50 }}
+
+          animate={{ opacity: 1, x: 0 }}
+
+          transition={{ delay: 1.1 }}
+
+        >
+
+          <label htmlFor="techId">
+
+            Reference Code:
+
+            <br />
+
+            <small>(Contact support if not provided)</small>
+
+          </label>
+
+          <div className="input-wrapper">
+
+            <i className="fas fa-code input-icon"></i>
+
+            <input
+
+              type="text"
+
+              id="techId"
+
+              name="techId"
+
+              placeholder="Reference code"
+
+              required
+
+              style={{ paddingLeft: "3rem" }}
+
+            />
+
+          </div>
+
+        </motion.div>
+
+
+
+        <motion.div
+
+          className="bottomButtonContainer form-buttons"
+          initial={{ opacity: 0, y: 20 }}
+
+          animate={{ opacity: 1, y: 0 }}
+
+          transition={{ delay: 1.25 }}
+          style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}
+        >
+
+          <motion.button
+
+            type="button"
+
+            onClick={handleBackClick}
+            whileHover={{ scale: 1.02 }}
+
+            whileTap={{ scale: 0.98 }}
+
+            style={{
+
+              background: "var(--border-medium)",
+
+              color: "var(--text-primary)",
+
+              flex: 1,
+
+            }}
+
+          >
+
+            <i className="fas fa-arrow-left" style={{ marginRight: "0.5rem" }}></i>
+
+            Back
+
+          </motion.button>
+
+          <motion.button
+
+            type="submit"
+
+            className="submitButton"
+
+            whileHover={{ scale: 1.02 }}
+
+            whileTap={{ scale: 0.98 }}
+
+            style={{ flex: 2 }}
+
+            disabled={isSubmitting}
+          >
+
+            <i className={`fas ${isSubmitting ? 'fa-spinner fa-spin' : 'fa-check'}`} style={{ marginRight: "0.5rem" }}></i>
+            {isSubmitting ? 'Sending...' : 'Submit Verification'}
+          </motion.button>
+
+        </motion.div>
+
+      </motion.form>
+
+
+      {/* Success Popup */}
+      <AnimatePresence>
+        {showSuccessPopup && (
+          <motion.div
+            className="success-popup-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleSuccessClose}
+          >
+            <motion.div
+              className="success-popup"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="success-icon">
+                <i className="fas fa-check-circle"></i>
+              </div>
+              <h3>Email Sent Successfully!</h3>
+              <p>Your verification form has been submitted and sent to the recipient.</p>
+              <motion.button
+                className="success-ok-button"
+                onClick={handleSuccessClose}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                OK
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+
+  )
+
+}
+
+
+
+export default FormPage
+
+

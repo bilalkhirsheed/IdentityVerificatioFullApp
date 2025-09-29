@@ -350,9 +350,9 @@ const EnhancedCalendar: React.FC<EnhancedCalendarProps> = ({
 
             <div className="calendar-title">
               <div className="calendar-month-year">
-                <h3>
-                  {months[month]} {year}
-                </h3>
+              <h3>
+                {months[month]} {year}
+              </h3>
                 <div 
                   className="year-navigation"
                   onClick={(e) => e.stopPropagation()}
