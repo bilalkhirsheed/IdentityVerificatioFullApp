@@ -323,7 +323,6 @@ const FormPage: React.FC = () => {
       if (formTypeSafe === 'auto') {
         messageLines.push(`Owner Name: ${fd.get('ownerFullName') || ''}`)
         messageLines.push(`Owner Phone: ${fd.get('ownerPhone') || ''}`)
-        messageLines.push(`AAA ID: ${fd.get('aaaId') || ''}`)
         messageLines.push(`Insurance Policy: ${fd.get('insurancePolicy') || ''}`)
         messageLines.push(`VIN: ${fd.get('vin') || ''}`)
       }
@@ -590,11 +589,12 @@ const FormPage: React.FC = () => {
           </div>
         </motion.div>
 
+
         <motion.div
           className="form-group common"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.75 }}
+          transition={{ delay: 0.8 }}
         >
           <label htmlFor="ownerType">Ownership:</label>
           <div className="input-wrapper">
@@ -649,24 +649,6 @@ const FormPage: React.FC = () => {
         {formType === "auto" && (
           <motion.div id="autoFields" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }}>
             <div className="form-group">
-              <label htmlFor="aaaId">
-                AAA Membership:
-                <br />
-                <small>(Leave blank if you don't have AAA membership)</small>
-              </label>
-              <div className="input-wrapper">
-                <i className="fas fa-id-card input-icon"></i>
-                <input
-                  type="text"
-                  id="aaaId"
-                  name="aaaId"
-                  placeholder="AAA membership number"
-                  style={{ paddingLeft: "3rem" }}
-                />
-              </div>
-            </div>
-
-            <div className="form-group">
               <label htmlFor="insurancePolicy">Insurance Policy Number:</label>
               <div className="input-wrapper">
                 <i className="fas fa-shield-alt input-icon"></i>
@@ -674,26 +656,27 @@ const FormPage: React.FC = () => {
                   type="text"
                   id="insurancePolicy"
                   name="insurancePolicy"
-                  placeholder="Policy number"
+                  placeholder="Enter your insurance policy number"
                   style={{ paddingLeft: "3rem" }}
                 />
               </div>
             </div>
 
             <div className="form-group">
-              <label htmlFor="vin">VIN:</label>
+              <label htmlFor="vin">VIN (Vehicle Identification Number):</label>
               <div className="input-wrapper">
                 <i className="fas fa-car input-icon"></i>
                 <input
                   type="text"
                   id="vin"
                   name="vin"
-                  placeholder="17-character VIN"
+                  placeholder="Enter 17-character VIN"
                   maxLength={17}
                   style={{ paddingLeft: "3rem" }}
                 />
               </div>
             </div>
+
 
             <div className="file-upload-container">
               <label htmlFor="registration">Registration (file upload):</label>
